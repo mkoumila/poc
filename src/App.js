@@ -1,22 +1,46 @@
-import { Canvas } from "@react-three/fiber";
-import { useGLTF, Stage, PresentationControls } from "@react-three/drei";
+import { useState } from "react";
+import CarBasic from "./CarBasic";
+import Tokyo from "./Tokyo";
 
-const Model = (props) => {
-  const { scene } = useGLTF("/car.glb");
-  return <primitive object={scene} {...props} />;
-};
+function App() {
+  const [chosen, setChosen] = useState(1);
 
-let App = () => {
+  const project = () => {
+    switch (chosen) {
+      case 1:
+        return <CarBasic />;
+      case 2:
+        return <Tokyo />;
+
+      default:
+        return <CarBasic />;
+    }
+  };
+
   return (
-    <Canvas dpr={[1, 2]} camera={{ fov: 45 }} style={{ position: "absolute" }}>
-      <color attach="background" args={["#000"]} />
-      <PresentationControls speed={4} zoom={0.5} polar={[-0.1, Math.PI / 4]}>
-        <Stage environment={null}>
-          <Model scale={0.01} />
-        </Stage>
-      </PresentationControls>
-    </Canvas>
+    <>
+      <div className="navigation">
+        <div
+          onClick={() => setChosen(1)}
+          className={`navigation_item ${
+            chosen === 1 ? "navigation_item-active" : ""
+          }`}
+        >
+          Car Basic
+        </div>
+        <div
+          onClick={() => setChosen(2)}
+          className={`navigation_item ${
+            chosen === 2 ? "navigation_item-active" : ""
+          }`}
+        >
+          Tokyo ( Scrollable )
+        </div>
+      </div>
+
+      {project()}
+    </>
   );
-};
+}
 
 export default App;
