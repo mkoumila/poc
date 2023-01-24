@@ -1,5 +1,5 @@
 import { MeshReflectorMaterial } from "@react-three/drei";
-import { useFrame, useLoader } from "@react-three/fiber";
+import { useLoader } from "@react-three/fiber";
 import { useEffect } from "react";
 import { LinearEncoding, RepeatWrapping, TextureLoader } from "three";
 
