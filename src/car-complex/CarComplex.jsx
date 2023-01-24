@@ -1,9 +1,16 @@
 import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import {
+  CubeCamera,
+  Environment,
+  OrbitControls,
+  PerspectiveCamera,
+} from "@react-three/drei";
 import { Ground } from "./Ground";
+import { Model } from "./Model";
+import { Rings } from "./Rings";
 
-const Model = () => {
+const Car = () => {
   return (
     <>
       {/* It makes it possible to move the camera around the fixed point which is the target of the OrbitControls */}
@@ -12,6 +19,19 @@ const Model = () => {
       <PerspectiveCamera makeDefault fov={50} position={[3, 2, 5]} />;
       {/* Specify a ground color and attach it the Canvas's background */}
       <color args={[0, 0, 0]} attach={"background"} />
+      {/* Car Model */}
+      <CubeCamera resolution={256} frames={Infinity}>
+        {(texture) => {
+          return (
+            <>
+              <Environment map={texture} />
+              <Model />
+            </>
+          );
+        }}
+      </CubeCamera>
+      {/* Rings component */}
+      <Rings />
       {/* SpotLight  */}
       <spotLight
         color={[1, 0.25, 0.7]}
@@ -40,7 +60,7 @@ let CarComplex = () => {
   return (
     <Suspense fallback={null}>
       <Canvas shadows>
-        <Model />
+        <Car />
       </Canvas>
     </Suspense>
   );

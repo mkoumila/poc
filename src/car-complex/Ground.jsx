@@ -1,5 +1,5 @@
 import { MeshReflectorMaterial } from "@react-three/drei";
-import { useLoader } from "@react-three/fiber";
+import { useFrame, useLoader } from "@react-three/fiber";
 import { useEffect } from "react";
 import { LinearEncoding, RepeatWrapping, TextureLoader } from "three";
 
@@ -9,7 +9,7 @@ export const Ground = () => {
     process.env.PUBLIC_URL + "textures/terrain-roughness.jpeg",
     process.env.PUBLIC_URL + "textures/terrain-normal.jpeg",
   ]);
-  
+
   useEffect(() => {
     [roughness, normal].forEach((el) => {
       el.wrapS = RepeatWrapping;
@@ -19,6 +19,13 @@ export const Ground = () => {
     /* Applying encoding to the normal texture */
     normal.encoding = LinearEncoding;
   }, [roughness, normal]);
+
+  /* To move the ground */
+  /* useFrame((state, delta) => {
+    let t = -state.clock.getElapsedTime() * 0.128;
+    roughness.offset.set(0, t % 1);
+    normal.offset.set(0, t % 1);
+  }); */
 
   return (
     // Allowing mesh to rotate in X Axis and receive and also cast shadows
