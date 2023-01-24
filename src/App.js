@@ -1,5 +1,6 @@
 import { useState } from "react";
 import CarBasic from "./CarBasic";
+import CarComplex from "./car-complex/CarComplex";
 import Tokyo from "./Tokyo";
 
 function App() {
@@ -11,6 +12,8 @@ function App() {
         return <CarBasic />;
       case 2:
         return <Tokyo />;
+      case 3:
+        return <CarComplex />;
 
       default:
         return <CarBasic />;
@@ -35,6 +38,14 @@ function App() {
           }`}
         >
           Tokyo ( Scrollable )
+        </div>
+        <div
+          onClick={() => setChosen(3)}
+          className={`navigation_item ${
+            chosen === 3 ? "navigation_item-active" : ""
+          }`}
+        >
+          Car Complex
         </div>
       </div>
 
