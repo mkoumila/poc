@@ -1,7 +1,8 @@
 import { useState } from "react";
-import CarBasic from "./CarBasic";
+import CarBasic from "./car-basic/CarBasic";
 import CarComplex from "./car-complex/CarComplex";
-import Tokyo from "./Tokyo";
+import Tokyo from "./tokyo/Tokyo";
+import Ball from "./ball/Ball";
 
 function App() {
   const [chosen, setChosen] = useState(1);
@@ -14,6 +15,8 @@ function App() {
         return <Tokyo />;
       case 3:
         return <CarComplex />;
+      case 4:
+        return <Ball />;
 
       default:
         return <CarBasic />;
@@ -46,6 +49,14 @@ function App() {
           }`}
         >
           Car Complex
+        </div>
+        <div
+          onClick={() => setChosen(4)}
+          className={`navigation_item ${
+            chosen === 4 ? "navigation_item-active" : ""
+          }`}
+        >
+          Ball
         </div>
       </div>
 
