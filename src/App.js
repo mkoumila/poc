@@ -3,6 +3,7 @@ import CarBasic from "./car-basic/CarBasic";
 import CarComplex from "./car-complex/CarComplex";
 import Tokyo from "./tokyo/Tokyo";
 import Ball from "./ball/Ball";
+import Cards from "./cards/Cards";
 
 function App() {
   const [chosen, setChosen] = useState(1);
@@ -17,6 +18,8 @@ function App() {
         return <CarComplex />;
       case 4:
         return <Ball />;
+      case 5:
+        return <Cards />;
 
       default:
         return <CarBasic />;
@@ -57,6 +60,14 @@ function App() {
           }`}
         >
           Ball
+        </div>
+        <div
+          onClick={() => setChosen(5)}
+          className={`navigation_item ${
+            chosen === 5 ? "navigation_item-active" : ""
+          }`}
+        >
+          Cards
         </div>
       </div>
 
