@@ -4,6 +4,7 @@ import CarComplex from "./car-complex/CarComplex";
 import Tokyo from "./tokyo/Tokyo";
 import Ball from "./ball/Ball";
 import Cards from "./cards/Cards";
+import SliderComponent from "./slider/Slider";
 
 function App() {
   const [chosen, setChosen] = useState(1);
@@ -20,6 +21,8 @@ function App() {
         return <Ball />;
       case 5:
         return <Cards />;
+      case 6:
+        return <SliderComponent />;
 
       default:
         return <CarBasic />;
@@ -68,6 +71,14 @@ function App() {
           }`}
         >
           Cards
+        </div>
+        <div
+          onClick={() => setChosen(6)}
+          className={`navigation_item ${
+            chosen === 6 ? "navigation_item-active" : ""
+          }`}
+        >
+          Slider
         </div>
       </div>
 
