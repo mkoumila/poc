@@ -17,25 +17,30 @@ const SliderComponent = () => {
         <SwiperSlide>
           <SliderItem
             modelPath="models/moon.glb"
-            backgroundColor="#2c2c2c"
+            colorA="#8d00ff"
+            colorB="#000"
             title="The Moon"
             sub="Corrupti quis in molestias dicta consectetur laboriosam nemo asperiores sed, quia earum harum ab cil!"
             scale={0.01}
+            btnTitle="Join VOID family"
+            btnLink="https://void.fr/"
           />
         </SwiperSlide>
         <SwiperSlide>
           <SliderItem
             modelPath="models/toon_thumbs_up.glb"
-            backgroundColor="#44c3c3"
+            colorA="#FF0000"
+            colorB="#ffea00"
             title="Thumbs Up"
-            sub="Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus voluptates quod qui sint officia incidunt."
+            sub="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Id voluptatum nostrum, ullam fugiat quasi ex fuga ab eos vero quis minus libero odio. Nulla reiciendis sint tenetur itaque iure dolorem."
             scale={0.01}
           />
         </SwiperSlide>
         <SwiperSlide>
           <SliderItem
             modelPath="models/low_five.glb"
-            backgroundColor="#FA9076"
+            colorA="#FF0000"
+            colorB="#342df2"
             title="Magical Hands"
             sub="Accusamus voluptates quod qui sint officia incidunt. Corrupti quis in molestias dicta consectetur laboriosam nemo asperiores sed."
             scale={0.01}
