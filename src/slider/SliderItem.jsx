@@ -2,7 +2,6 @@ import { Suspense, useRef } from "react";
 import {
   Environment,
   Html,
-  Loader,
   OrbitControls,
   Stage,
   useGLTF,
@@ -72,8 +71,8 @@ const Model = ({
           <sphereGeometry />
           <LayerMaterial side={THREE.BackSide}>
             <Depth
-              colorA={new THREE.Color(colorA).convertSRGBToLinear()}
-              colorB={new THREE.Color(colorB).convertSRGBToLinear()}
+              colorA={colorA}
+              colorB={colorB}
               near={0}
               far={300}
               origin={[100, 100, 100]}
@@ -82,6 +81,17 @@ const Model = ({
         </mesh>
       </Environment>
     </>
+  );
+};
+
+const LoadingOverlay = () => {
+  return (
+    <Html as="div" className="slider_loader">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </Html>
   );
 };
 
@@ -98,7 +108,7 @@ const SliderItem = ({
   return (
     <div className="slider_item">
       <Canvas camera={{ fov: 35, zoom: 0.5 }}>
-        <Suspense fallback={null}>
+        <Suspense fallback={<LoadingOverlay />}>
           <Stage intensity={0} shadows="false">
             <Model
               modelPath={modelPath}
@@ -113,7 +123,6 @@ const SliderItem = ({
           </Stage>
         </Suspense>
       </Canvas>
-      <Loader containerStyles />
     </div>
   );
 };

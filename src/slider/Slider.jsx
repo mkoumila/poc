@@ -29,8 +29,8 @@ const SliderComponent = () => {
         <SwiperSlide>
           <SliderItem
             modelPath="models/toon_thumbs_up.glb"
-            colorA="#FF0000"
-            colorB="#ffea00"
+            colorA="#ffea00"
+            colorB="#FF0000"
             title="Thumbs Up"
             sub="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Id voluptatum nostrum, ullam fugiat quasi ex fuga ab eos vero quis minus libero odio. Nulla reiciendis sint tenetur itaque iure dolorem."
             scale={0.01}
