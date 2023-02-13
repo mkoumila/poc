@@ -1,20 +1,24 @@
 import * as THREE from "three";
 import { Suspense, useEffect, useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import {
   ScrollControls,
   useScroll,
   useAnimations,
   Stage,
-  useGLTF,
 } from "@react-three/drei";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 const Model = (props) => {
   const [hovered, setHovered] = useState(false);
 
   const group = useRef();
-  const { nodes, materials, animations } = useGLTF(
+  /* const { nodes, materials, animations } = useGLTF(
     process.env.PUBLIC_URL + "models/dbz/dbz-scene.glb"
+  ); */
+  const { nodes, materials, animations } = useLoader(
+    GLTFLoader,
+    process.env.PUBLIC_URL + "models/dbz/scene.gltf"
   );
   const { actions } = useAnimations(animations, group);
 
@@ -73,9 +77,14 @@ const Model = (props) => {
     //group.current.getObjectByName("sky").rotation.z += delta
   });
 
+  const externalLink = (e, link, target = "_blank") => {
+    e.stopPropagation();
+    window.open(link, target);
+  };
+
   return (
     <group ref={group} {...props} dispose={null}>
-      <group name="Sketchfab_Scene">
+      <group name="Scene">
         <group name="Sketchfab_model" rotation={[-Math.PI / 2, 0, 0]}>
           <group
             name="292a1eed1c17436a8f214f04df93c767fbx"
@@ -92,74 +101,51 @@ const Model = (props) => {
                 >
                   <mesh
                     name="body_snk_txt_0"
+                    castShadow
+                    receiveShadow
                     geometry={nodes.body_snk_txt_0.geometry}
                     material={materials.snk_txt}
                   />
                   <mesh
-                    name="body_snk_txt_0_1"
-                    geometry={nodes.body_snk_txt_0_1.geometry}
+                    name="body_snk_txt_0001"
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.body_snk_txt_0001.geometry}
                     material={materials.snk_txt}
                   />
                   <mesh
-                    name="body_snk_txt_0_2"
-                    geometry={nodes.body_snk_txt_0_2.geometry}
+                    name="body_snk_txt_0002"
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.body_snk_txt_0002.geometry}
                     material={materials.snk_txt}
-                  />
-                </group>
-                <group
-                  name="platform"
-                  position={[-21.17, 9.49, 621.59]}
-                  scale={[57.66, 2.49, 57.66]}
-                >
-                  <mesh
-                    name="platform_snake_texture_0"
-                    geometry={nodes.platform_snake_texture_0.geometry}
-                    material={materials.snake_texture}
                   />
                 </group>
                 <group
                   name="d_ball"
                   position={[-25.19, -2.25, 730.09]}
                   scale={1.07}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    window.open("https://www.void.fr/", "_blank");
-                  }}
-                  onPointerOver={() => setHovered(true)}
-                  onPointerOut={() => setHovered(false)}
                 >
                   <mesh
                     name="d_ball_orange_0"
+                    castShadow
+                    receiveShadow
                     geometry={nodes.d_ball_orange_0.geometry}
                     material={materials.orange}
                   />
                   <mesh
                     name="d_ball_red_0"
+                    castShadow
+                    receiveShadow
                     geometry={nodes.d_ball_red_0.geometry}
                     material={materials.material}
-                  />
-                </group>
-                <group
-                  name="sky"
-                  rotation={[0.31, 0.14, -0.18]}
-                  scale={2151.95}
-                >
-                  <mesh
-                    name="sky_sky_texture_0"
-                    geometry={nodes.sky_sky_texture_0.geometry}
-                    material={materials.sky_texture}
-                  />
-                </group>
-                <group name="tail" position={[-21.17, 0, 607.46]}>
-                  <mesh
-                    name="tail_snk_txt_0"
-                    geometry={nodes.tail_snk_txt_0.geometry}
-                    material={materials.snk_txt}
                   />
                 </group>
                 <group name="head" position={[-21.17, 0, 607.46]}>
                   <mesh
                     name="head_snk_txt_0"
+                    castShadow
+                    receiveShadow
                     geometry={nodes.head_snk_txt_0.geometry}
                     material={materials.snk_txt}
                   />
@@ -167,8 +153,8 @@ const Model = (props) => {
                 <group name="move_car" position={[-21.17, 0, 607.46]}>
                   <group
                     name="car"
-                    position={[-227.61, 3.38, -930.69]}
-                    rotation={[0, 1.35, 0.24]}
+                    position={[0.31, 35.34, -24.17]}
+                    rotation={[-Math.PI, 1.51, 3.14]}
                     scale={0.3}
                   >
                     <group
@@ -177,6 +163,15 @@ const Model = (props) => {
                       rotation={[3.12, -1.51, 3.12]}
                       scale={3.31}
                     >
+                      <group name="cloud_b1">
+                        <mesh
+                          name="cloud_b1_car_texture_0"
+                          castShadow
+                          receiveShadow
+                          geometry={nodes.cloud_b1_car_texture_0.geometry}
+                          material={materials.car_texture}
+                        />
+                      </group>
                       <group
                         name="wheels_01"
                         position={[0.25, 34.35, -27.24]}
@@ -185,6 +180,8 @@ const Model = (props) => {
                       >
                         <mesh
                           name="wheels_01_car_texture_0"
+                          castShadow
+                          receiveShadow
                           geometry={nodes.wheels_01_car_texture_0.geometry}
                           material={materials.car_texture}
                         />
@@ -197,29 +194,112 @@ const Model = (props) => {
                       >
                         <mesh
                           name="wheels_02_car_texture_0"
+                          castShadow
+                          receiveShadow
                           geometry={nodes.wheels_02_car_texture_0.geometry}
-                          material={materials.car_texture}
-                        />
-                      </group>
-                      <group name="cloud_b1">
-                        <mesh
-                          name="cloud_b1_car_texture_0"
-                          geometry={nodes.cloud_b1_car_texture_0.geometry}
                           material={materials.car_texture}
                         />
                       </group>
                       <mesh
                         name="goku_b1_goku_texture_0"
+                        castShadow
+                        receiveShadow
                         geometry={nodes.goku_b1_goku_texture_0.geometry}
                         material={materials.goku_texture}
                       />
                     </group>
                   </group>
                 </group>
+                <group
+                  name="platform"
+                  position={[-21.17, 9.49, 621.59]}
+                  scale={[57.66, 2.49, 57.66]}
+                >
+                  <mesh
+                    name="platform_snake_texture_0"
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.platform_snake_texture_0.geometry}
+                    material={materials.snake_texture}
+                  />
+                </group>
+                <group
+                  name="sky"
+                  rotation={[0.31, 0.14, -0.18]}
+                  scale={2151.95}
+                >
+                  <mesh
+                    name="sky_sky_texture_0"
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.sky_sky_texture_0.geometry}
+                    material={materials.sky_texture}
+                  />
+                </group>
+                <group name="tail" position={[-21.17, 0, 607.46]}>
+                  <mesh
+                    name="tail_snk_txt_0"
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.tail_snk_txt_0.geometry}
+                    material={materials.snk_txt}
+                  />
+                </group>
               </group>
             </group>
           </group>
         </group>
+        <mesh
+          name="card_01"
+          geometry={nodes.card_01.geometry}
+          material={nodes.card_01.material}
+          position={[2.25, 0.93, 3.05]}
+          rotation={[1.58, 0.14, 0.53]}
+          scale={[0.5, 0.5, 0.3]}
+          onClick={(e) => {
+            externalLink(e, "https://void.fr/fr/agence-digitale/", "_blank");
+          }}
+          onPointerOver={() => setHovered(true)}
+          onPointerOut={() => setHovered(false)}
+        >
+          <meshStandardMaterial color="#1a8600" />
+        </mesh>
+
+        <mesh
+          name="card_02"
+          geometry={nodes.card_02.geometry}
+          material={nodes.card_02.material}
+          position={[1.54, 0.43, -0.02]}
+          rotation={[1.27, -0.25, 0.66]}
+          scale={[0.5, 0.5, 0.3]}
+          onClick={(e) => {
+            externalLink(
+              e,
+              "https://void.fr/fr/etude-de-cas-marketing-digital/",
+              "_blank"
+            );
+          }}
+          onPointerOver={() => setHovered(true)}
+          onPointerOut={() => setHovered(false)}
+        >
+          <meshStandardMaterial color="#fd3333" />
+        </mesh>
+
+        <mesh
+          name="card_03"
+          geometry={nodes.card_03.geometry}
+          material={nodes.card_03.material}
+          position={[-2.95, 0.41, -3.54]}
+          rotation={[1.74, -0.04, -0.63]}
+          scale={[0.5, 0.5, 0.3]}
+          onClick={(e) => {
+            externalLink(e, "https://void.fr/fr/insights/", "_blank");
+          }}
+          onPointerOver={() => setHovered(true)}
+          onPointerOut={() => setHovered(false)}
+        >
+          <meshStandardMaterial color="#0a6cff" />
+        </mesh>
       </group>
     </group>
   );
