@@ -33,6 +33,7 @@ canvas {
   border-radius: 5px;
   background-color: #797979;
   box-shadow: 1px 1px 6px #414141;
+  white-space: nowrap;
 }
 
 .navigation_item-active {
@@ -113,5 +114,14 @@ canvas {
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .navigation {
+    overflow-x: scroll;
+    width: -webkit-fill-available;
+    width: -moz-available;
+    padding-right: 20px;
   }
 }
