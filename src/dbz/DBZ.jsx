@@ -13,9 +13,7 @@ const Model = (props) => {
   const [hovered, setHovered] = useState(false);
 
   const group = useRef();
-  /* const { nodes, materials, animations } = useGLTF(
-    process.env.PUBLIC_URL + "models/dbz/dbz-scene.glb"
-  ); */
+  
   const { nodes, materials, animations } = useLoader(
     GLTFLoader,
     process.env.PUBLIC_URL + "models/dbz/scene.gltf"
