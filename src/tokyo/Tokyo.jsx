@@ -13,7 +13,7 @@ const Model = ({ ...props }) => {
   // This hook gives you offets, ranges and other useful things
   const scroll = useScroll();
   const { scene, nodes, animations } = useGLTF(
-    process.env.PUBLIC_URL + "models/LittlestTokyo-transformed.glb"
+    process.env.PUBLIC_URL + "models/tokyo/LittlestTokyo-transformed.glb"
   );
 
   const { actions } = useAnimations(animations, scene);

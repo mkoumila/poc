@@ -1,8 +1,12 @@
-import { Canvas } from "@react-three/fiber";
-import { useGLTF, Stage, PresentationControls } from "@react-three/drei";
+import { Canvas, useLoader } from "@react-three/fiber";
+import { Stage, PresentationControls } from "@react-three/drei";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 const Model = (props) => {
-  const { scene } = useGLTF(process.env.PUBLIC_URL + "models/scene.glb");
+  const { scene } = useLoader(
+    GLTFLoader,
+    process.env.PUBLIC_URL + "models/car/scene.gltf"
+  );
   return <primitive object={scene} {...props} />;
 };
 

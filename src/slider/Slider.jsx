@@ -16,7 +16,7 @@ const SliderComponent = () => {
       >
         <SwiperSlide>
           <SliderItem
-            modelPath="models/moon.glb"
+            modelPath="models/slider/moon.glb"
             colorA="#8d00ff"
             colorB="#000"
             title="The Moon"
@@ -28,7 +28,7 @@ const SliderComponent = () => {
         </SwiperSlide>
         <SwiperSlide>
           <SliderItem
-            modelPath="models/toon_thumbs_up.glb"
+            modelPath="models/slider/toon_thumbs_up.glb"
             colorA="#ffea00"
             colorB="#FF0000"
             title="Thumbs Up"
@@ -38,7 +38,7 @@ const SliderComponent = () => {
         </SwiperSlide>
         <SwiperSlide>
           <SliderItem
-            modelPath="models/low_five.glb"
+            modelPath="models/slider/low_five.glb"
             colorA="#FF0000"
             colorB="#342df2"
             title="Magical Hands"
