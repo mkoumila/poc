@@ -13,7 +13,7 @@ const Model = (props) => {
   const [hovered, setHovered] = useState(false);
 
   const group = useRef();
-  
+
   const { nodes, materials, animations } = useLoader(
     GLTFLoader,
     process.env.PUBLIC_URL + "models/dbz/scene.gltf"
@@ -311,7 +311,7 @@ const DBZ = () => {
       <Canvas>
         <Suspense fallback={null}>
           <Stage environment={null}>
-            <ScrollControls pages={10}>
+            <ScrollControls pages={16}>
               <Model />
             </ScrollControls>
           </Stage>

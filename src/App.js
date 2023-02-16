@@ -6,6 +6,7 @@ import Ball from "./ball/Ball";
 import Cards from "./cards/Cards";
 import SliderComponent from "./slider/Slider";
 import DBZ from "./dbz/DBZ";
+import Train from "./train/Train";
 
 function App() {
   const [chosen, setChosen] = useState(1);
@@ -26,6 +27,8 @@ function App() {
         return <SliderComponent />;
       case 7:
         return <DBZ />;
+      case 8:
+        return <Train />;
 
       default:
         return <CarBasic />;
@@ -90,6 +93,14 @@ function App() {
           }`}
         >
           DBZ
+        </div>
+        <div
+          onClick={() => setChosen(8)}
+          className={`navigation_item ${
+            chosen === 8 ? "navigation_item-active" : ""
+          }`}
+        >
+          Train
         </div>
       </div>
 
