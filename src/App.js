@@ -9,7 +9,7 @@ import DBZ from "./dbz/DBZ";
 import Train from "./train/Train";
 
 function App() {
-  const [chosen, setChosen] = useState(1);
+  const [chosen, setChosen] = useState(8);
 
   const project = () => {
     switch (chosen) {

@@ -1,29 +1,38 @@
 import * as THREE from "three";
-import { Suspense, useEffect, useRef, useState } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Suspense, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import {
   ScrollControls,
   useScroll,
   useAnimations,
   Stage,
-  useGLTF,
-  useTexture,
 } from "@react-three/drei";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 const Model = (props) => {
   const [hovered, setHovered] = useState(false);
 
   const group = useRef();
-  const { nodes, materials, animations } = useGLTF(
-    process.env.PUBLIC_URL + "models/train/train_global.glb"
+
+  const { nodes, materials, animations } = useLoader(
+    GLTFLoader,
+    process.env.PUBLIC_URL + "/models/train/train_global_2.gltf"
   );
+
   const { actions } = useAnimations(animations, group);
 
   // This hook gives you offets, ranges and other useful things
   const scroll = useScroll();
 
+  // To avoid camera passing through the GLtf objects
+  useLayoutEffect(() => {
+    Object.values(nodes["clouds"].children).forEach((cloud) => {
+      cloud.material.side = THREE.FrontSide;
+    });
+  });
+
   useEffect(() => {
-    actions["Empty_Follow_CAMERA"].play().paused = true;
+    actions["Action"].play().paused = true;
   }, [actions]);
 
   // on mouse hover over element, change cursor style
@@ -33,9 +42,9 @@ const Model = (props) => {
 
   useFrame((state, delta) => {
     // Get car element
-    let car = group.current.getObjectByName("z-KART");
+    let car = group.current.getObjectByName("kart");
     // Animate on scroll
-    const action = actions["Empty_Follow_CAMERA"];
+    const action = actions["Action"];
     const offset = scroll.offset;
     action.time = THREE.MathUtils.damp(
       action.time,
@@ -50,17 +59,21 @@ const Model = (props) => {
     // Change camera position in mobile and desktop
     if (window.innerWidth < 1024) {
       // How up the camera is from the car
-      state.camera.translateY(0.65);
-      // How camera is far from car
-      state.camera.translateZ(1.4);
-    } else {
-      // How up the camera is from the car
       state.camera.translateY(0.3);
       // How camera is far from car
-      state.camera.translateZ(0.5);
+      state.camera.translateZ(0.3);
+      // Reducing camera scale to put directly behind the train
+      state.camera.scale.set(0.1, 0.1, 0.1);
+    } else {
+      // How up the camera is from the car
+      state.camera.translateY(0.15);
+      // How camera is far from car
+      state.camera.translateZ(0);
+      // Reducing camera scale to put directly behind the train
+      state.camera.scale.set(0.1, 0.1, 0.1);
     }
 
-    // Create a focal point to look at with the camera (not added to scene)
+    // Create a focal point to look at with the camera
     // give that point the same location and rotation as the car
     // move it ahead of the car along its rotational axis
     let povPoint = new THREE.Object3D();
@@ -82,323 +95,454 @@ const Model = (props) => {
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">
-        <group name="Z-CURVE-circuit-horizontal-et-rotation" scale={0.39}>
-          <group name="Empty_Follow_CAMERA" position={[-11.65, 0.49, -0.11]}>
+        <group name="model">
+          <group name="circuit_model">
             <mesh
-              name="z-KART"
-              geometry={nodes["z-KART"].geometry}
-              material={materials["Material.001"]}
-              position={[0.55, -0.32, 0.35]}
-              rotation={[0.02, -0.04, -0.06]}
-              scale={1.01}
+              name="joints"
+              geometry={nodes.joints.geometry}
+              material={materials["Joint-rail-material"]}
+              scale={0.26}
+            />
+            <mesh
+              name="tube-gauche"
+              geometry={nodes["tube-gauche"].geometry}
+              material={materials["rail-tube-material"]}
+              scale={0.26}
+            />
+            <mesh
+              name="tube_droit"
+              geometry={nodes.tube_droit.geometry}
+              material={materials["rail-tube-material"]}
+              scale={0.26}
             />
           </group>
+          <group name="planes">
+            <mesh
+              name="carton-typo-drupal"
+              geometry={nodes["carton-typo-drupal"].geometry}
+              material={materials["export-typo-avec-fond"]}
+              position={[10.78, -0.39, 0.3]}
+              rotation={[1.6, -0.03, 1.76]}
+              scale={0.26}
+              onClick={(e) => {
+                externalLink(
+                  e,
+                  "https://void.fr/fr/agence-digitale-experte-drupal/",
+                  "_blank"
+                );
+              }}
+              onPointerOver={() => setHovered(true)}
+              onPointerOut={() => setHovered(false)}
+            />
+            <mesh
+              name="carton-typo-etude-de-cas"
+              geometry={nodes["carton-typo-etude-de-cas"].geometry}
+              material={materials["carton-typo-etude-de-cas-"]}
+              onClick={(e) => {
+                externalLink(
+                  e,
+                  "https://void.fr/fr/etude-de-cas-marketing-digital/",
+                  "_blank"
+                );
+              }}
+              onPointerOver={() => setHovered(true)}
+              onPointerOut={() => setHovered(false)}
+            />
+            <mesh
+              name="carton-typo-insight"
+              geometry={nodes["carton-typo-insight"].geometry}
+              material={materials["Carton-typo-insight-futura-"]}
+              onClick={(e) => {
+                externalLink(e, "https://void.fr/fr/insights/", "_blank");
+              }}
+              onPointerOver={() => setHovered(true)}
+              onPointerOut={() => setHovered(false)}
+            />
+            <mesh
+              name="carton-typo-perf-marketing"
+              geometry={nodes["carton-typo-perf-marketing"].geometry}
+              material={materials["carton-typo-Perf-marketing_1-"]}
+              position={[5.22, -0.76, 0.98]}
+              rotation={[1.54, -0.03, 2.17]}
+              scale={0.36}
+              onClick={(e) => {
+                externalLink(
+                  e,
+                  "https://void.fr/fr/performance-strategie-digitale/",
+                  "_blank"
+                );
+              }}
+              onPointerOver={() => setHovered(true)}
+              onPointerOut={() => setHovered(false)}
+            />
+            <mesh
+              name="carton-typo-social-media"
+              geometry={nodes["carton-typo-social-media"].geometry}
+              material={materials["cartontypo-social-media-"]}
+              onClick={(e) => {
+                externalLink(e, "https://void.fr/fr/social-media/", "_blank");
+              }}
+              onPointerOver={() => setHovered(true)}
+              onPointerOut={() => setHovered(false)}
+            />
+            <mesh
+              name="carton-typo-UX"
+              geometry={nodes["carton-typo-UX"].geometry}
+              material={materials["carton-typo-UX-"]}
+              onClick={(e) => {
+                externalLink(
+                  e,
+                  "https://void.fr/fr/design-experience-UX/",
+                  "_blank"
+                );
+              }}
+              onPointerOver={() => setHovered(true)}
+              onPointerOut={() => setHovered(false)}
+            />
+          </group>
+          <group name="clouds">
+            <mesh
+              name="cloud001"
+              geometry={nodes.cloud001.geometry}
+              material={materials["material-cloud.008"]}
+              position={[55.17, 0.11, 11.65]}
+              rotation={[0, -Math.PI / 2, 0]}
+              scale={1.37}
+            />
+            <mesh
+              name="cloud002"
+              geometry={nodes.cloud002.geometry}
+              material={materials["material-cloud.011"]}
+              position={[20.42, -8.94, -3.99]}
+              rotation={[0, -Math.PI / 2, 0]}
+              scale={0.25}
+            />
+            <mesh
+              name="cloud003"
+              geometry={nodes.cloud003.geometry}
+              material={materials["material-cloud.012"]}
+              position={[43.8, -11.2, 1.23]}
+              rotation={[0, -Math.PI / 2, 0]}
+              scale={0.25}
+            />
+            <mesh
+              name="cloud004"
+              geometry={nodes.cloud004.geometry}
+              material={materials["material-cloud-pink"]}
+              position={[28.5, -13.99, 2.17]}
+              rotation={[0, Math.PI / 2, 0]}
+              scale={0.47}
+            />
+            <mesh
+              name="cloud005"
+              geometry={nodes.cloud005.geometry}
+              material={materials["material-cloud.015"]}
+              position={[39.93, 2.87, -0.58]}
+              rotation={[-1.97, 1.51, 1.92]}
+              scale={0.94}
+            />
+            <mesh
+              name="cloud006"
+              geometry={nodes.cloud006.geometry}
+              material={materials["material-cloud.016"]}
+              position={[7.34, 7, 3.91]}
+              rotation={[0, Math.PI / 2, 0]}
+              scale={0.42}
+            />
+            <mesh
+              name="cloud007"
+              geometry={nodes.cloud007.geometry}
+              material={materials["material-cloud-pink"]}
+              position={[30.49, 2.87, -3.04]}
+              rotation={[0, Math.PI / 2, 0]}
+              scale={0.28}
+            />
+            <mesh
+              name="cloud008"
+              geometry={nodes.cloud008.geometry}
+              material={materials["material-cloud.018"]}
+              position={[27.06, -2.38, 1.1]}
+              rotation={[0, -Math.PI / 2, 0]}
+              scale={0.25}
+            />
+            <mesh
+              name="cloud009"
+              geometry={nodes.cloud009.geometry}
+              material={materials["material-cloud.019"]}
+              position={[53.43, -1.65, 8.75]}
+              rotation={[-3, -1.21, 3.11]}
+              scale={0.62}
+            />
+            <mesh
+              name="cloud010"
+              geometry={nodes.cloud010.geometry}
+              material={materials["material-cloud-pink"]}
+              position={[44.5, -4.38, -9.34]}
+              rotation={[0, -Math.PI / 2, 0]}
+              scale={0.25}
+            />
+            <mesh
+              name="cloud011"
+              geometry={nodes.cloud011.geometry}
+              material={materials["material-cloud.021"]}
+              position={[53.1, -1.84, -6.16]}
+              rotation={[-Math.PI, 1.05, -Math.PI]}
+              scale={0.51}
+            />
+            <mesh
+              name="cloud012"
+              geometry={nodes.cloud012.geometry}
+              material={materials["material-cloud.022"]}
+              position={[45.23, -4.39, 13.23]}
+              rotation={[-3.08, -1.44, -2.94]}
+              scale={1.98}
+            />
+            <mesh
+              name="cloud013"
+              geometry={nodes.cloud013.geometry}
+              material={materials["material-cloud.023"]}
+              position={[12.37, -0.59, -5.21]}
+              rotation={[-Math.PI, 1.36, -Math.PI]}
+              scale={0.69}
+            />
+            <mesh
+              name="cloud014"
+              geometry={nodes.cloud014.geometry}
+              material={materials["material-cloud-pink"]}
+              position={[11.71, 12.79, -6.84]}
+              rotation={[0.03, -1.34, -0.01]}
+              scale={0.65}
+            />
+            <mesh
+              name="cloud015"
+              geometry={nodes.cloud015.geometry}
+              material={materials["material-cloud.001"]}
+              position={[9.32, -4.48, 3.91]}
+              rotation={[0, Math.PI / 2, 0]}
+              scale={0.42}
+            />
+            <mesh
+              name="cloud016"
+              geometry={nodes.cloud016.geometry}
+              material={materials["material-cloud.024"]}
+              position={[32.16, 17.89, 1.7]}
+              rotation={[0, Math.PI / 2, 0]}
+              scale={0.28}
+            />
+            <mesh
+              name="cloud017"
+              geometry={nodes.cloud017.geometry}
+              material={materials["material-cloud.026"]}
+              position={[56.46, 7.81, 5.69]}
+              rotation={[1.41, 1.55, -1.12]}
+              scale={0.61}
+            />
+            <mesh
+              name="cloud018"
+              geometry={nodes.cloud018.geometry}
+              material={materials["material-cloud.003"]}
+              position={[60.29, -7.48, -0.27]}
+              rotation={[0, Math.PI / 2, 0]}
+              scale={0.68}
+            />
+            <mesh
+              name="cloud019"
+              geometry={nodes.cloud019.geometry}
+              material={materials["material-cloud.006"]}
+              position={[33.96, -7.71, -10.39]}
+              rotation={[0, -1.31, 0]}
+              scale={0.72}
+            />
+            <mesh
+              name="cloud020"
+              geometry={nodes.cloud020.geometry}
+              material={materials["material-cloud.009"]}
+              position={[28.32, -18.02, 4.91]}
+              rotation={[0, -Math.PI / 2, 0]}
+              scale={0.64}
+            />
+            <mesh
+              name="cloud021"
+              geometry={nodes.cloud021.geometry}
+              material={materials["material-cloud-pink"]}
+              position={[40.85, -8.61, -0.58]}
+              rotation={[-1.97, 1.51, 1.92]}
+              scale={0.94}
+            />
+            <mesh
+              name="cloud022"
+              geometry={nodes.cloud022.geometry}
+              material={materials["material-cloud.027"]}
+              position={[30.59, 5.56, -17.7]}
+              rotation={[-Math.PI, 1.27, -Math.PI]}
+              scale={1.04}
+            />
+            <mesh
+              name="cloud023"
+              geometry={nodes.cloud023.geometry}
+              material={materials["material-cloud-pink"]}
+              position={[44.36, 8.27, -11.27]}
+              rotation={[0, -Math.PI / 2, 0]}
+              scale={0.25}
+            />
+            <mesh
+              name="cloud024"
+              geometry={nodes.cloud024.geometry}
+              material={materials["material-cloud.029"]}
+              position={[21.75, 16.22, 5.05]}
+              rotation={[0, -Math.PI / 2, 0]}
+              scale={0.25}
+            />
+            <mesh
+              name="cloud025"
+              geometry={nodes.cloud025.geometry}
+              material={materials["material-cloud-pink"]}
+              position={[23.14, -3.01, -10.39]}
+              rotation={[0, Math.PI / 2, 0]}
+              scale={0.8}
+            />
+            <mesh
+              name="cloud026"
+              geometry={nodes.cloud026.geometry}
+              material={materials["material-cloud.004"]}
+              position={[26.84, -1.11, -5.27]}
+              rotation={[0, Math.PI / 2, 0]}
+              scale={0.28}
+            />
+            <mesh
+              name="cloud027"
+              geometry={nodes.cloud027.geometry}
+              material={materials["material-cloud.031"]}
+              position={[25.43, -4.41, 3.89]}
+              rotation={[0.41, -1.42, 0.78]}
+              scale={0.21}
+            />
+            <mesh
+              name="cloud028"
+              geometry={nodes.cloud028.geometry}
+              material={materials["material-cloud.032"]}
+              position={[18.44, -2.18, 5.07]}
+              rotation={[0.03, -1.34, -0.01]}
+              scale={0.65}
+            />
+            <mesh
+              name="cloud029"
+              geometry={nodes.cloud029.geometry}
+              material={materials["material-cloud.033"]}
+              position={[16.23, 10.16, -15.4]}
+              rotation={[0, -1.5, 0]}
+              scale={0.88}
+            />
+            <mesh
+              name="cloud030"
+              geometry={nodes.cloud030.geometry}
+              material={materials["material-cloud.034"]}
+              position={[46, 22.62, -7.67]}
+              rotation={[0, Math.PI / 2, 0]}
+              scale={1.42}
+            />
+            <mesh
+              name="cloud031"
+              geometry={nodes.cloud031.geometry}
+              material={materials["material-cloud-pink"]}
+              position={[14.5, -6.19, 0.53]}
+              rotation={[0, -Math.PI / 2, 0]}
+              scale={0.22}
+            />
+            <mesh
+              name="cloud032"
+              geometry={nodes.cloud032.geometry}
+              material={materials["material-cloud.036"]}
+              position={[28.51, -31.45, -0.97]}
+              rotation={[-Math.PI, 1.36, -Math.PI]}
+              scale={2.35}
+            />
+            <mesh
+              name="cloud033"
+              geometry={nodes.cloud033.geometry}
+              material={materials["material-cloud.037"]}
+              position={[46.01, 25.43, 14.37]}
+              rotation={[-2.47, -1.29, -3.13]}
+              scale={2.31}
+            />
+            <mesh
+              name="cloud034"
+              geometry={nodes.cloud034.geometry}
+              material={materials["material-cloud.038"]}
+              position={[42.84, 3.18, -16.81]}
+              rotation={[-Math.PI, 1.05, -Math.PI]}
+              scale={0.27}
+            />
+            <mesh
+              name="cloud035"
+              geometry={nodes.cloud035.geometry}
+              material={materials["material-cloud.039"]}
+              position={[28, 0.66, 1.65]}
+              rotation={[0, Math.PI / 2, 0]}
+              scale={0.2}
+            />
+            <mesh
+              name="cloud036"
+              geometry={nodes.cloud036.geometry}
+              material={materials["material-cloud.040"]}
+              position={[-1.53, 0.74, -1.33]}
+              rotation={[0, -Math.PI / 2, 0]}
+              scale={0.26}
+            />
+            <mesh
+              name="cloud037"
+              geometry={nodes.cloud037.geometry}
+              material={materials["material-cloud-pink"]}
+              position={[9.43, -1.15, 6.62]}
+              rotation={[0.14, 1.45, 2.36]}
+              scale={0.37}
+            />
+            <mesh
+              name="cloud038"
+              geometry={nodes.cloud038.geometry}
+              material={materials["material-cloud.014"]}
+              position={[12.89, 7.48, -4.15]}
+              rotation={[3.05, -1.45, -0.79]}
+              scale={0.52}
+            />
+            <mesh
+              name="cloud039"
+              geometry={nodes.cloud039.geometry}
+              material={materials["material-cloud.025"]}
+              position={[13.39, 11.98, 5.15]}
+              rotation={[3.06, 1.36, -0.56]}
+              scale={0.55}
+            />
+            <mesh
+              name="cloud040"
+              geometry={nodes.cloud040.geometry}
+              material={materials["material-cloud.002"]}
+              position={[9.16, -4, -4.15]}
+              rotation={[3.05, -1.45, -0.79]}
+              scale={0.52}
+            />
+          </group>
+
+          <group name="sky">
+            <mesh
+              name="sky_sphere"
+              geometry={nodes.sky_sphere.geometry}
+              material={materials.Sky_Texture}
+              position={[20.01, 2.66, 0.22]}
+              scale={45.25}
+            />
+          </group>
+          <mesh
+            name="kart"
+            geometry={nodes.kart.geometry}
+            material={materials["red-for-kart"]}
+            position={[-3.92, 0.07, 0.09]}
+            rotation={[0, 0, -0.04]}
+          />
         </group>
-        <mesh
-          name="cube-parent"
-          geometry={nodes["cube-parent"].geometry}
-          material={nodes["cube-parent"].material}
-          scale={0.03}
-        >
-          <mesh
-            name="joint001"
-            geometry={nodes.joint001.geometry}
-            material={materials["Joint-rail-material"]}
-            scale={10.25}
-          />
-          <mesh
-            name="tube-d001"
-            geometry={nodes["tube-d001"].geometry}
-            material={nodes["tube-d001"].material}
-            scale={10.25}
-          />
-          <mesh
-            name="tube-g001"
-            geometry={nodes["tube-g001"].geometry}
-            material={nodes["tube-g001"].material}
-            scale={10.25}
-          />
-        </mesh>
-        <mesh
-          name="CLOUD-meshed"
-          geometry={nodes["CLOUD-meshed"].geometry}
-          material={materials["Material.003"]}
-          position={[9.74, 0.12, 2.31]}
-          rotation={[0, 0.17, 0]}
-          scale={0.37}
-        />
-        <mesh
-          name="CLOUD-meshed001"
-          geometry={nodes["CLOUD-meshed001"].geometry}
-          material={materials["Material.004"]}
-          position={[12.83, -3.06, -4.66]}
-          rotation={[0, -0.01, 0]}
-          scale={0.44}
-        />
-        <mesh
-          name="CLOUD-meshed002"
-          geometry={nodes["CLOUD-meshed002"].geometry}
-          material={materials["Material.005"]}
-          position={[21.71, 2.56, -2.8]}
-          rotation={[0.13, 0.2, 0]}
-          scale={0.55}
-        />
-        <mesh
-          name="CLOUD-meshed003"
-          geometry={nodes["CLOUD-meshed003"].geometry}
-          material={materials["Material.006"]}
-          position={[2.95, -1.27, 2.1]}
-          scale={0.29}
-        />
-        <mesh
-          name="CLOUD-meshed004"
-          geometry={nodes["CLOUD-meshed004"].geometry}
-          material={materials["Material.008"]}
-          position={[7.8, 0.75, -1.77]}
-          rotation={[0, -0.01, 0]}
-          scale={0.3}
-        />
-        <mesh
-          name="CLOUD-meshed005"
-          geometry={nodes["CLOUD-meshed005"].geometry}
-          material={materials["Material.007"]}
-          position={[4.69, -1.45, -1.13]}
-          rotation={[0, -0.01, 0]}
-          scale={0.21}
-        />
-        <mesh
-          name="CLOUD-meshed006"
-          geometry={nodes["CLOUD-meshed006"].geometry}
-          material={materials["Material.009"]}
-          position={[0, 0.74, 0.93]}
-          rotation={[0, -0.01, 0]}
-          scale={0.28}
-        />
-        <mesh
-          name="CLOUD-meshed007"
-          geometry={nodes["CLOUD-meshed007"].geometry}
-          material={materials["Material.010"]}
-          position={[14.06, -3.6, 2.32]}
-          rotation={[0, 0.07, 0.24]}
-          scale={0.29}
-        />
-        <mesh
-          name="CLOUD-meshed008"
-          geometry={nodes["CLOUD-meshed008"].geometry}
-          material={materials["Material.011"]}
-          position={[19.66, -5.95, -4.86]}
-          rotation={[0.26, 0.09, 0.35]}
-          scale={0.3}
-        />
-        <mesh
-          name="CLOUD-meshed009"
-          geometry={nodes["CLOUD-meshed009"].geometry}
-          material={materials["Material.012"]}
-          position={[25.9, -3.62, 0.41]}
-          rotation={[-0.05, 0.12, 0.67]}
-          scale={0.59}
-        />
-        <mesh
-          name="CLOUD-meshed010"
-          geometry={nodes["CLOUD-meshed010"].geometry}
-          material={materials["Material.013"]}
-          position={[26.07, -6.38, 0.56]}
-          rotation={[0.21, 0.1, 0.39]}
-          scale={0.41}
-        />
-        <mesh
-          name="CLOUD-meshed011"
-          geometry={nodes["CLOUD-meshed011"].geometry}
-          material={materials["Material.014"]}
-          position={[29.29, -1.24, 0.55]}
-          rotation={[0.03, 0.11, 0.4]}
-          scale={0.09}
-        />
-        <mesh
-          name="CLOUD-meshed012"
-          geometry={nodes["CLOUD-meshed012"].geometry}
-          material={materials["Material.015"]}
-          position={[28.12, 3.06, 1.99]}
-          rotation={[0.03, 0.11, 0.4]}
-          scale={0.18}
-        />
-        <mesh
-          name="CLOUD-meshed013"
-          geometry={nodes["CLOUD-meshed013"].geometry}
-          material={materials["Material.016"]}
-          position={[20.86, -8.21, 1.49]}
-          rotation={[-0.15, 0.15, 0.44]}
-          scale={0.3}
-        />
-        <mesh
-          name="CLOUD-meshed014"
-          geometry={nodes["CLOUD-meshed014"].geometry}
-          material={materials["Material.017"]}
-          position={[19.07, -1.33, 3.78]}
-          rotation={[-0.03, 0.16, 0.68]}
-          scale={0.59}
-        />
-        <mesh
-          name="CLOUD-meshed015"
-          geometry={nodes["CLOUD-meshed015"].geometry}
-          material={materials["Material.018"]}
-          position={[25.49, -0.78, -2.54]}
-          rotation={[-0.13, 0.1, 0.45]}
-          scale={0.26}
-        />
-        <mesh
-          name="CLOUD-meshed016"
-          geometry={nodes["CLOUD-meshed016"].geometry}
-          material={materials["Material.019"]}
-          position={[27.32, -2.09, -2.53]}
-          rotation={[0.03, 0.11, 0.4]}
-          scale={0.18}
-        />
-        <mesh
-          name="CLOUD-meshed017"
-          geometry={nodes["CLOUD-meshed017"].geometry}
-          material={materials["Material.020"]}
-          position={[27.92, 3.38, -0.62]}
-          rotation={[0.03, 0.11, 0.4]}
-          scale={0.19}
-        />
-        <mesh
-          name="CLOUD-meshed018"
-          geometry={nodes["CLOUD-meshed018"].geometry}
-          material={materials["Material.021"]}
-          position={[30, -0.55, 1.35]}
-          rotation={[-0.17, 0.08, 0.44]}
-          scale={0.15}
-        />
-        <mesh
-          name="CLOUD-meshed019"
-          geometry={nodes["CLOUD-meshed019"].geometry}
-          material={materials["Material.022"]}
-          position={[34.83, 0.07, -1.22]}
-          rotation={[-0.17, 0.08, 0.44]}
-          scale={0.15}
-        />
-        <mesh
-          name="CLOUD-meshed020"
-          geometry={nodes["CLOUD-meshed020"].geometry}
-          material={materials["Material.023"]}
-          position={[35.1, -0.81, 0.45]}
-          rotation={[0.03, 0.08, 0.41]}
-          scale={0.18}
-        />
-        <mesh
-          name="CLOUD-meshed021"
-          geometry={nodes["CLOUD-meshed021"].geometry}
-          material={materials["Material.024"]}
-          position={[17.49, -11.92, 0.39]}
-          rotation={[-0.15, 0.15, 0.44]}
-          scale={0.13}
-        />
-        <mesh
-          name="CLOUD-meshed022"
-          geometry={nodes["CLOUD-meshed022"].geometry}
-          material={materials["Material.025"]}
-          position={[18.2, -8.63, -3.51]}
-          rotation={[-0.04, 0.08, 0.38]}
-          scale={0.13}
-        />
-        <mesh
-          name="CLOUD-meshed023"
-          geometry={nodes["CLOUD-meshed023"].geometry}
-          material={materials["Material.026"]}
-          position={[23.12, -13.71, 0.75]}
-          rotation={[-0.15, 0.15, 0.44]}
-          scale={0.29}
-        />
-        <mesh
-          name="CLOUD-meshed024"
-          geometry={nodes["CLOUD-meshed024"].geometry}
-          material={materials["Material.027"]}
-          position={[34.8, -2.46, -4.19]}
-          rotation={[0.11, 0.08, 0.44]}
-          scale={0.15}
-        />
-        <mesh
-          name="CLOUD-meshed025"
-          geometry={nodes["CLOUD-meshed025"].geometry}
-          material={materials["Material.028"]}
-          position={[31.97, 3.81, 0.46]}
-          rotation={[0.03, 0.11, 0.4]}
-          scale={0.18}
-        />
-        <mesh
-          name="TYPO_AVEC_FOND"
-          geometry={nodes.TYPO_AVEC_FOND.geometry}
-          material={materials["export-typo-avec-fond"]}
-          position={[8.95, -0.39, 0.29]}
-          rotation={[1.71, 0.03, 1.75]}
-          scale={0.26}
-        />
-        <mesh
-          name="Carton-typo-insight-futura-"
-          geometry={nodes["Carton-typo-insight-futura-"].geometry}
-          material={materials["Carton-typo-insight-futura-"]}
-          position={[31.58, -0.65, -0.63]}
-          rotation={[1.48, 0.02, 1.19]}
-          scale={0.68}
-        />
-        <mesh
-          name="carton-typo-UX-"
-          geometry={nodes["carton-typo-UX-"].geometry}
-          material={materials["carton-typo-UX-"]}
-          position={[1.18, 1.68, -0.71]}
-          rotation={[1.48, 0.01, 1.2]}
-          scale={0.61}
-          onClick={(e) =>
-            externalLink(
-              e,
-              "https://void.fr/fr/design-experience-UX/",
-              "_blank"
-            )
-          }
-          onPointerOver={() => setHovered(true)}
-          onPointerOut={() => setHovered(false)}
-        />
-        <mesh
-          name="cartontypo-social-media-"
-          geometry={nodes["cartontypo-social-media-"].geometry}
-          material={materials["cartontypo-social-media-"]}
-          position={[15.34, -5.31, 0.47]}
-          rotation={[1.63, -0.02, 1.2]}
-          scale={0.45}
-        />
-        <mesh
-          name="carton-typo-etude-de-cas-"
-          geometry={nodes["carton-typo-etude-de-cas-"].geometry}
-          material={materials["carton-typo-etude-de-cas-"]}
-          position={[23.46, -0.64, -0.44]}
-          rotation={[Math.PI / 2, 0, 1.17]}
-          scale={0.44}
-        />
-        <mesh
-          name="carton-typo-Perf-marketing_1-"
-          geometry={nodes["carton-typo-Perf-marketing_1-"].geometry}
-          material={materials["carton-typo-Perf-marketing_1-"]}
-          position={[4.58, -0.77, 0.98]}
-          rotation={[1.51, -0.01, 1.77]}
-          scale={0.36}
-        />
       </group>
     </group>
   );
-};
-
-const Background = () => {
-  const { gl } = useThree();
-
-  const texture = useTexture(
-    `${process.env.PUBLIC_URL}imgs/image-fond-world.jpg`
-  );
-  const formatted = new THREE.WebGLCubeRenderTarget(
-    texture.image.height
-  ).fromEquirectangularTexture(gl, texture);
-
-  return <primitive attach="background" object={formatted.texture} />;
 };
 
 const Train = () => {
@@ -407,11 +551,10 @@ const Train = () => {
       <Canvas>
         <Suspense fallback={null}>
           <Stage environment={null}>
-            <ScrollControls pages={4}>
+            <ScrollControls pages={20}>
               <Model />
             </ScrollControls>
           </Stage>
-          <Background />
         </Suspense>
       </Canvas>
     </>
