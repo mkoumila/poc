@@ -6,6 +6,7 @@ import {
   useScroll,
   useAnimations,
   Stage,
+  Html,
 } from "@react-three/drei";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
@@ -303,21 +304,30 @@ const Model = (props) => {
   );
 };
 
-//useGLTF.preload("/scene-transformed.glb");
+const LoadingOverlay = () => {
+  return (
+    <Html as="div" className="slider_loader">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </Html>
+  );
+};
 
 const DBZ = () => {
   return (
-    <>
+    <div style={{ backgroundColor: "#000", height: "100%" }}>
       <Canvas>
-        <Suspense fallback={null}>
-          <Stage environment={null}>
+        <Suspense fallback={<LoadingOverlay />}>
+          <Stage environment={null} adjustCamera={false}>
             <ScrollControls pages={16}>
               <Model />
             </ScrollControls>
           </Stage>
         </Suspense>
       </Canvas>
-    </>
+    </div>
   );
 };
 
