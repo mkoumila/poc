@@ -7,17 +7,18 @@ import {
   useAnimations,
   Stage,
   Html,
+  useGLTF,
 } from "@react-three/drei";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+/* import { EffectComposer, DepthOfField } from "@react-three/postprocessing"; */
 
 const Model = (props) => {
   const [hovered, setHovered] = useState(false);
 
   const group = useRef();
 
-  const { nodes, materials, animations } = useLoader(
-    GLTFLoader,
-    process.env.PUBLIC_URL + "/models/train/rails-cleaner-11-bake-5.gltf"
+  const { nodes, materials, animations } = useGLTF(
+    process.env.PUBLIC_URL + "/models/train/train_global.glb"
   );
 
   const { actions } = useAnimations(animations, group);
@@ -33,17 +34,10 @@ const Model = (props) => {
   });
 
   useEffect(() => {
-    actions["Bake-Train"].play().paused = true;
-    actions["clients-btn-scale-up-animation"].play().paused = false;
-    actions["drupla-btn-scale-up-animation"].play().paused = false;
-    actions["insights-btn-scale-up-animation"].play().paused = false;
-    actions["discover-btn-scale-up-animation"].play().paused = false;
-    actions["social-btn-scale-up-animation"].play().paused = false;
-    actions["UX-btn-hover-animation"].play().paused = false;
-    actions["end-btn-action-hover"].play().paused = false;
+    actions["Action.001"].play().paused = true;
+    actions["Action.002"].play().paused = false;
+    actions["Action"].play().paused = false;
     actions["action_logo_void-end"].play().paused = false;
-    actions["Bake-area-light-animation"].play().paused = false;
-    /* actions["bake-point-light-animation"].play().paused = false; */
     actions["action_logo_void.start"].play().paused = false;
   }, [actions]);
 
@@ -56,7 +50,7 @@ const Model = (props) => {
     // Get car element
     let car = group.current.getObjectByName("kart");
     // Animate on scroll
-    const action = actions["Bake-Train"];
+    const action = actions["Action.001"];
     const offset = scroll.offset;
     action.time = THREE.MathUtils.damp(
       action.time,
@@ -335,98 +329,182 @@ const Model = (props) => {
               geometry={nodes["discover-clients"].geometry}
               material={materials["material-decouvrir-blanc"]}
               position={[-4.452965, -0.171026, -3.144145]}
+              onPointerOver={() => {
+                setHovered(true);
+                actions["clients-btn-scale-up-animation"].play().paused = false;
+              }}
+              onPointerLeave={() => {
+                setHovered(false);
+                actions["clients-btn-scale-up-animation"].play().paused = true;
+              }}
+              onClick={(e) =>
+                externalLink(
+                  e,
+                  "https://void.fr/fr/etude-de-cas-marketing-digital/"
+                )
+              }
             />
             <mesh
               name="discover-drupal"
               geometry={nodes["discover-drupal"].geometry}
               material={materials["material-decouvrir-blanc"]}
               position={[-23.065266, 0.266957, -2.204568]}
+              onPointerOver={() => {
+                setHovered(true);
+                actions["drupla-btn-scale-up-animation"].play().paused = false;
+              }}
+              onPointerLeave={() => {
+                setHovered(false);
+                actions["drupla-btn-scale-up-animation"].play().paused = true;
+              }}
+              onClick={(e) =>
+                externalLink(
+                  e,
+                  "https://void.fr/fr/agence-digitale-experte-drupal/"
+                )
+              }
             />
             <mesh
               name="discover-insights"
               geometry={nodes["discover-insights"].geometry}
               material={materials["material-decouvrir-blanc"]}
               position={[0.00016, -0.377302, 0.059759]}
+              onPointerOver={() => {
+                setHovered(true);
+                actions[
+                  "insights-btn-scale-up-animation"
+                ].play().paused = false;
+              }}
+              onPointerLeave={() => {
+                setHovered(false);
+                actions["insights-btn-scale-up-animation"].play().paused = true;
+              }}
+              onClick={(e) => externalLink(e, "https://void.fr/fr/insights/")}
             />
             <mesh
               name="discover-perf-marketing"
               geometry={nodes["discover-perf-marketing"].geometry}
               material={materials["material-decouvrir-blanc"]}
               position={[-33.719563, -0.146394, 0.69266]}
+              onPointerOver={() => {
+                setHovered(true);
+                actions[
+                  "discover-btn-scale-up-animation"
+                ].play().paused = false;
+              }}
+              onPointerLeave={() => {
+                setHovered(false);
+                actions["discover-btn-scale-up-animation"].play().paused = true;
+              }}
+              onClick={(e) =>
+                externalLink(
+                  e,
+                  "https://void.fr/fr/performance-strategie-digitale/"
+                )
+              }
             />
             <mesh
               name="discover-social-media"
               geometry={nodes["discover-social-media"].geometry}
               material={materials["material-decouvrir-blanc"]}
               position={[-16.809504, -3.930169, -1.618541]}
+              onPointerOver={() => {
+                setHovered(true);
+                actions["social-btn-scale-up-animation"].play().paused = false;
+              }}
+              onPointerLeave={() => {
+                setHovered(false);
+                actions["social-btn-scale-up-animation"].play().paused = true;
+              }}
+              onClick={(e) =>
+                externalLink(e, "https://void.fr/fr/social-media/")
+              }
             />
             <mesh
               name="discover-ux"
               geometry={nodes["discover-ux"].geometry}
               material={materials["material-decouvrir-blanc"]}
               position={[-39.569702, 2.406423, -2.57441]}
+              onPointerOver={() => {
+                setHovered(true);
+                actions["UX-btn-hover-animation"].play().paused = false;
+              }}
+              onPointerLeave={() => {
+                setHovered(false);
+                actions["UX-btn-hover-animation"].play().paused = true;
+              }}
+              onClick={(e) =>
+                externalLink(e, "https://void.fr/fr/design-experience-UX/")
+              }
             />
           </group>
           <group name="ending-3D" position={[47.745129, -0.824241, 4.510498]}>
             <group
               name="void-logo-container"
-              position={[3.747929, 1.991982, -0.537325]}
-              rotation={[-0.04713, 0.06759, 1.572589]}
+              position={[3.747929, 2.016111, -0.368421]}
+              rotation={[-0.001753, 0.067589, 1.572589]}
               scale={1.311189}
             >
               <mesh
                 name="void-logo-end"
                 geometry={nodes["void-logo-end"].geometry}
-                material={materials["SVGMat.001"]}
-                position={[-0.589862, 0.994372, 0.027559]}
+                material={materials["SVGMat.002"]}
+                position={[-0.589862, 0.994375, 0.02756]}
                 rotation={[0.0021, -1.57056, 0]}
-                scale={[2.142841, 2.142841, 2.142842]}
+                scale={2.142842}
               />
             </group>
             <mesh
               name="end-btn001"
               geometry={nodes["end-btn001"].geometry}
               material={materials["material-nous-contacter-blanc"]}
-              position={[0.595428, -0.047061, -0.129447]}
-              rotation={[-0.072902, 0.102629, 0.011792]}
+              position={[0.595428, -0.047061, -0.109982]}
+              rotation={[-0.000138, 0.067576, 0.011497]}
+              onPointerOver={() => {
+                setHovered(true);
+                actions["end-btn-action-hover"].play().paused = false;
+              }}
+              onPointerLeave={() => {
+                setHovered(false);
+                actions["end-btn-action-hover"].play().paused = true;
+              }}
+              onClick={(e) =>
+                externalLink(
+                  e,
+                  "https://void.fr/fr/etude-de-cas-marketing-digital/#contact"
+                )
+              }
             />
             <mesh
               name="felicitations-text"
               geometry={nodes["felicitations-text"].geometry}
               material={materials["3D_Font_Material"]}
-              position={[2.566818, -1.301181, -0.218291]}
-              rotation={[1.979913, -0.056363, 1.5299]}
+              position={[2.566818, -1.301181, -0.150207]}
+              rotation={[2.039031, -0.056363, 1.5299]}
               scale={0.710974}
             />
             <mesh
               name="kilocalories-text001"
               geometry={nodes["kilocalories-text001"].geometry}
               material={materials["SVGMat.002"]}
-              position={[2.371811, 0.270767, -0.303799]}
-              rotation={[1.501801, -0.053305, 1.498581]}
+              position={[2.371811, 0.270767, -0.235715]}
+              rotation={[1.567175, -0.053305, 1.49858]}
               scale={0.105136}
             />
           </group>
           <group name="sky-and-light">
             <group
               name="light"
-              position={[-2.73906, 7.443947, 1.181734]}
+              position={[11.233078, 3.7313, 2.305084]}
               rotation={[-1.228391, 0.097806, 1.572024]}
             />
-            {/* <pointLight
-              name="point-light-animated"
-              intensity={543.514131}
-              decay={2}
-              color="#ffcd82"
-              position={[-9.70173, 2.801467, 0.125589]}
-              rotation={[-0.218291, -1.269322, 1.198303]}
-            /> */}
+
             <mesh
               name="cube-bg-applied001"
               geometry={nodes["cube-bg-applied001"].geometry}
               material={materials["Sky_Texture.-forbake.003"]}
-              position={[15.05, 10.23, 1.24]}
-              scale={86.8}
+              position={[15.054052, 10.228363, 1.23877]}
+              scale={86.798935}
             />
           </group>
           <group name="start" position={[47.745129, -0.824241, 4.510498]}>
@@ -446,19 +524,19 @@ const Model = (props) => {
               />
             </group>
             <mesh
+              name="gif-mouse-scroll_1"
+              geometry={nodes["gif-mouse-scroll_1"].geometry}
+              material={materials["gif-mouse-scroll_1"]}
+              position={[-55.779091, 3.042665, -4.427336]}
+              scale={3.102448}
+            />
+            <mesh
               name="air-scrolling001"
               geometry={nodes["air-scrolling001"].geometry}
               material={materials["3D_Font_Material"]}
               position={[-54.913021, 1.52152, -4.396183]}
               rotation={[1.570749, 0, 1.570511]}
               scale={0.34777}
-            />
-            <mesh
-              name="gif-mouse-scroll_1"
-              geometry={nodes["gif-mouse-scroll_1"].geometry}
-              material={materials["gif-mouse-scroll_1"]}
-              position={[-55.779091, 3.02805, -4.427336]}
-              scale={3.102448}
             />
             <mesh
               name="invente"
@@ -507,7 +585,7 @@ const Model = (props) => {
               geometry={nodes["3-drupal002"].geometry}
               material={materials["3D_Font_Material"]}
               position={[-23.211952, 1.150415, -3.136698]}
-              rotation={[1.505764, 0.032712, 1.35505]}
+              rotation={[1.569297, 0.032712, 1.35505]}
               scale={0.391084}
             />
             <mesh
@@ -515,7 +593,7 @@ const Model = (props) => {
               geometry={nodes["3-drupal003"].geometry}
               material={materials["3D_Font_Material"]}
               position={[-23.211952, 0.691161, -3.136698]}
-              rotation={[1.505764, 0.032712, 1.35505]}
+              rotation={[1.569297, 0.032712, 1.35505]}
               scale={0.704324}
             />
             <mesh
@@ -562,16 +640,16 @@ const Model = (props) => {
               geometry={nodes["6-insights001"].geometry}
               material={materials["3D_Font_Material"]}
               position={[0.528446, 0.091558, 0.331102]}
-              rotation={[1.499708, 0.042921, -2.610368]}
-              scale={[0.484448, 0.484448, 0.484449]}
+              rotation={[1.590076, 0.042921, -2.610368]}
+              scale={[0.484448, 0.484449, 0.484449]}
             />
           </group>
           <mesh
             name="kart"
             geometry={nodes.kart.geometry}
             material={materials["red-for-kart"]}
-            position={[-9.517061, 2.043248, 0.093628]}
-            rotation={[-0.010979, 0.000001, -0.000262]}
+            position={[-9.499063, 2.056472, 0.092783]}
+            rotation={[-0.010979, 0.000003, -0.000522]}
           />
         </group>
       </group>
@@ -596,19 +674,21 @@ const Train = () => {
       <Canvas>
         <Suspense fallback={<LoadingOverlay />}>
           <Stage environment={null} adjustCamera={false}>
-            <ScrollControls pages={20}>
+            <ScrollControls pages={30}>
               <Model />
             </ScrollControls>
           </Stage>
         </Suspense>
+        {/* <EffectComposer multisampling={0} disableNormalPass={true}>
+          <DepthOfField
+            focusDistance={0} // where to focus
+            focalLength={1} // focal length
+            bokehScale={2} // bokeh size
+          />
+        </EffectComposer> */}
       </Canvas>
     </div>
   );
 };
-
-useLoader.preload(
-  GLTFLoader,
-  process.env.PUBLIC_URL + "/models/train/rails-cleaner-11-bake-5.gltf"
-);
 
 export default Train;

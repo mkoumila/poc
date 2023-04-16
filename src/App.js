@@ -37,7 +37,7 @@ function App() {
 
   return (
     <>
-      <div className="navigation">
+      {/* <div className="navigation">
         <div
           onClick={() => setChosen(1)}
           className={`navigation_item ${
@@ -102,7 +102,7 @@ function App() {
         >
           Train
         </div>
-      </div>
+      </div> */}
 
       {project()}
     </>
