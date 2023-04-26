@@ -9,7 +9,7 @@ import {
   Html,
   useGLTF,
 } from "@react-three/drei";
-/* import { EffectComposer, DepthOfField } from "@react-three/postprocessing"; */
+import { EffectComposer, DepthOfField } from "@react-three/postprocessing";
 
 const Model = (props) => {
   const [hovered, setHovered] = useState(false);
@@ -667,7 +667,7 @@ const LoadingOverlay = () => {
   );
 };
 
-const Train = () => {
+const TrainBokeh = () => {
   return (
     <div style={{ backgroundColor: "#000", height: "100%" }}>
       <Canvas>
@@ -678,16 +678,16 @@ const Train = () => {
             </ScrollControls>
           </Stage>
         </Suspense>
-        {/* <EffectComposer multisampling={0} disableNormalPass={true}>
+        <EffectComposer multisampling={0} disableNormalPass={true}>
           <DepthOfField
             focusDistance={0} // where to focus
             focalLength={1} // focal length
-            bokehScale={2} // bokeh size
+            bokehScale={8} // bokeh size
           />
-        </EffectComposer> */}
+        </EffectComposer>
       </Canvas>
     </div>
   );
 };
 
-export default Train;
+export default TrainBokeh;
