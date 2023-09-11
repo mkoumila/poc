@@ -16,10 +16,25 @@ const Void3DMenu = () => {
     >
       <div className="fixed top-0 left-0 w-full h-[80px] bg-gray-100 flex items-center justify-end px-10">
         <div
-          className="p-3 rounded-lg cursor-pointer border-2 border-black transition-all hover:bg-black hover:text-white"
+          className="text-black w-13 h-13 hover:scale-110 transition-all cursor-pointer"
           onClick={() => setIsVisible(true)}
         >
-          Click Me
+          <svg
+            width="50"
+            height="50"
+            viewBox="0 0 33 15"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="3.14879" cy="2.62419" r="2.51549" fill="#010000" />
+            <circle cx="3.14904" cy="11.7229" r="2.51549" fill="#010000" />
+            <circle cx="12.2389" cy="2.62418" r="2.51549" fill="#010000" />
+            <circle cx="12.2389" cy="11.7229" r="2.51549" fill="#010000" />
+            <circle cx="21.329" cy="2.62418" r="2.51549" fill="#010000" />
+            <circle cx="21.329" cy="11.7229" r="2.51549" fill="#010000" />
+            <circle cx="30.4191" cy="2.62418" r="2.51549" fill="#010000" />
+            <circle cx="30.4191" cy="11.7229" r="2.51549" fill="#010000" />
+          </svg>
         </div>
       </div>
       <Transition
