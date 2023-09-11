@@ -7,9 +7,10 @@ import Cards from "./cards/Cards";
 import SliderComponent from "./slider/Slider";
 import DBZ from "./dbz/DBZ";
 import Train from "./train/Train";
+import Void3DMenu from "./3d-menu/Void3DMenu";
 
 function App() {
-  const [chosen, setChosen] = useState(8);
+  const [chosen, setChosen] = useState(9);
 
   const project = () => {
     switch (chosen) {
@@ -29,9 +30,11 @@ function App() {
         return <DBZ />;
       case 8:
         return <Train />;
+      case 9:
+        return <Void3DMenu />;
 
       default:
-        return <CarBasic />;
+        return <Void3DMenu />;
     }
   };
 
@@ -101,6 +104,14 @@ function App() {
           }`}
         >
           Train
+        </div>
+        <div
+          onClick={() => setChosen(9)}
+          className={`navigation_item ${
+            chosen === 9 ? "navigation_item-active" : ""
+          }`}
+        >
+          3d Menu
         </div>
       </div>
 
