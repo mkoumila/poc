@@ -32,7 +32,7 @@ const Model = (props) => {
   };
 
   const { nodes, materials, animations } = useGLTF(
-    process.env.PUBLIC_URL + "models/menu/void_3d_menu_draco.gltf"
+    process.env.PUBLIC_URL + "models/menu/void_3d_menu_draco.glb"
   );
 
   const { actions } = useAnimations(animations, group);
@@ -60,6 +60,9 @@ const Model = (props) => {
   useEffect(() => {
     // to correct the model position
     group.current.rotation.y = -80 * (Math.PI / 180);
+
+    // Changing scene position to get it closer the light source for better shadows
+    group.current.position.set(-10, 5, -50);
   }, []);
 
   // To scale the hovered item
@@ -81,56 +84,56 @@ const Model = (props) => {
           <group name="Scene_1">
             <group name="3D-items">
               <group
-                ref={elementsRefs.agence}
                 name="agence-item-parent"
-                position={[1, -5.537454, -18.686707]}
+                position={[1, -5.53745413, -18.68670654]}
+                ref={elementsRefs.agence}
               >
                 <mesh
-                  castShadows
-                  receiveShadows
                   name="man-body"
+                  castShadow
+                  receiveShadow
                   geometry={nodes["man-body"].geometry}
                   material={materials["Material.007"]}
-                  position={[0.10199, -0.455825, 1.00445]}
-                  scale={0.974459}
+                  position={[0.1019901, -0.45582485, 1.00444984]}
+                  scale={0.97445917}
                 >
                   <mesh
-                    castShadows
-                    receiveShadows
                     name="man-head"
+                    castShadow
+                    receiveShadow
                     geometry={nodes["man-head"].geometry}
-                    material={materials.Material}
-                    position={[0, 1.325762, 0]}
+                    material={materials["Material.001"]}
+                    position={[0, 1.32576132, 0]}
                   />
                 </mesh>
                 <mesh
-                  castShadows
-                  receiveShadows
                   name="man2-body"
+                  castShadow
+                  receiveShadow
                   geometry={nodes["man2-body"].geometry}
-                  material={materials["Material.001"]}
-                  position={[0.078308, -0.459689, -1.097324]}
-                  scale={0.974459}
+                  material={materials["Material.002"]}
+                  position={[0.07830822, -0.45968866, -1.09732437]}
+                  scale={0.97445917}
                 >
                   <mesh
-                    castShadows
-                    receiveShadows
                     name="man2-head"
+                    castShadow
+                    receiveShadow
                     geometry={nodes["man2-head"].geometry}
-                    material={materials.Material}
-                    position={[0, 1.303253, 0]}
+                    material={materials["Material.001"]}
+                    position={[0, 1.30325222, 0]}
                   />
                 </mesh>
               </group>
               <group
-                ref={elementsRefs.analytic}
                 name="analytics-item-parent"
-                position={[0.093725, -5.611374, 18.495743]}
+                position={[0.09372487, -5.6113739, 18.4957428]}
+                ref={elementsRefs.analytic}
               >
                 <mesh
-                  castShadows
-                  receiveShadows
                   name="analytics-item001"
+                  castShadow
+                  receiveShadow
                   geometry={nodes["analytics-item001"].geometry}
                   material={materials["Material.007"]}
                   morphTargetDictionary={
@@ -139,56 +142,56 @@ const Model = (props) => {
                   morphTargetInfluences={
                     nodes["analytics-item001"].morphTargetInfluences
                   }
-                  position={[1.129708, -1.162647, 0.117756]}
-                  rotation={[0, -0.190389, 0]}
-                  scale={0.374375}
+                  position={[1.12970781, -1.16264725, 0.11775589]}
+                  rotation={[0, -0.19038938, 0]}
+                  scale={[0.37437478, 0.37437475, 0.37437478]}
                 >
                   <mesh
-                    castShadows
-                    receiveShadows
                     name="analytics-item002"
+                    castShadow
+                    receiveShadow
                     geometry={nodes["analytics-item002"].geometry}
-                    material={materials.Material}
+                    material={materials["Material.001"]}
                     morphTargetDictionary={
                       nodes["analytics-item002"].morphTargetDictionary
                     }
                     morphTargetInfluences={
                       nodes["analytics-item002"].morphTargetInfluences
                     }
-                    position={[-0.425446, 0.905369, -3.346816]}
+                    position={[-0.42544794, 0.90537071, -3.34681964]}
                   />
                   <mesh
-                    castShadows
-                    receiveShadows
                     name="analytics-item003"
+                    castShadow
+                    receiveShadow
                     geometry={nodes["analytics-item003"].geometry}
-                    material={materials["Material.001"]}
+                    material={materials["Material.002"]}
                     morphTargetDictionary={
                       nodes["analytics-item003"].morphTargetDictionary
                     }
                     morphTargetInfluences={
                       nodes["analytics-item003"].morphTargetInfluences
                     }
-                    position={[-0.425446, 0.905369, -3.346816]}
+                    position={[-0.42544794, 0.90537071, -3.34681964]}
                   />
                   <mesh
-                    castShadows
-                    receiveShadows
                     name="analytics-item004"
+                    castShadow
+                    receiveShadow
                     geometry={nodes["analytics-item004"].geometry}
-                    material={materials.Material}
+                    material={materials["Material.001"]}
                     morphTargetDictionary={
                       nodes["analytics-item004"].morphTargetDictionary
                     }
                     morphTargetInfluences={
                       nodes["analytics-item004"].morphTargetInfluences
                     }
-                    position={[-0.425446, 0.905369, -3.346816]}
+                    position={[-0.42544794, 0.90537071, -3.34681964]}
                   />
                   <mesh
-                    castShadows
-                    receiveShadows
                     name="analytics-item005"
+                    castShadow
+                    receiveShadow
                     geometry={nodes["analytics-item005"].geometry}
                     material={materials["Material.007"]}
                     morphTargetDictionary={
@@ -197,220 +200,219 @@ const Model = (props) => {
                     morphTargetInfluences={
                       nodes["analytics-item005"].morphTargetInfluences
                     }
-                    position={[-0.425446, 0.905369, -3.346816]}
+                    position={[-0.42544794, 0.90537071, -3.34681964]}
                   />
                 </mesh>
               </group>
               <group
-                ref={elementsRefs.insight}
                 name="insight-item-parent"
-                position={[1.10123, -5.296604, -6.401546]}
+                position={[1.10122979, -5.29660368, -6.40154552]}
+                ref={elementsRefs.insight}
               >
                 <group
                   name="insight-item"
-                  position={[0.413696, -1.196221, 0.56484]}
-                  rotation={[-0.092247, -0.39047, -0.035197]}
-                  scale={0.94779}
+                  position={[0.41369617, -1.19622135, 0.56483984]}
+                  rotation={[-0.09224649, -0.39046981, -0.03519652]}
+                  scale={[0.94779009, 0.94779009, 0.94779027]}
                 >
                   <mesh
-                    castShadows
-                    receiveShadows
                     name="Cylinder005"
+                    castShadow
+                    receiveShadow
                     geometry={nodes.Cylinder005.geometry}
                     material={materials["Material.007"]}
                   />
                   <mesh
-                    castShadows
-                    receiveShadows
                     name="Cylinder005_1"
+                    castShadow
+                    receiveShadow
                     geometry={nodes.Cylinder005_1.geometry}
-                    material={materials.Material}
+                    material={materials["Material.001"]}
                   />
                   <mesh
-                    castShadows
-                    receiveShadows
                     name="Cylinder005_2"
+                    castShadow
+                    receiveShadow
                     geometry={nodes.Cylinder005_2.geometry}
-                    material={materials["Material.001"]}
+                    material={materials["Material.002"]}
                   />
                 </group>
               </group>
               <group
-                ref={elementsRefs.realisation}
                 name="realisation-item-parent"
-                position={[1.831782, -5.488535, 6.064255]}
+                position={[1.8317821, -5.48853493, 6.06425524]}
+                ref={elementsRefs.realisation}
               >
                 <mesh
-                  castShadows
-                  receiveShadows
                   name="realisation-paper-item"
+                  castShadow
+                  receiveShadow
                   geometry={nodes["realisation-paper-item"].geometry}
-                  material={materials["Material.001"]}
-                  position={[0.117725, 0.103251, 0.033756]}
-                  rotation={[-0.144913, 0.158447, 0.001862]}
-                  scale={1.072258}
+                  material={materials["Material.002"]}
+                  position={[0.1177249, 0.1032505, 0.03375578]}
+                  rotation={[-0.14491322, 0.15844748, 0.00186237]}
+                  scale={[1.072258, 1.072258, 1.07225811]}
                 >
                   <mesh
-                    castShadows
-                    receiveShadows
                     name="realisation-item-0"
+                    castShadow
+                    receiveShadow
                     geometry={nodes["realisation-item-0"].geometry}
-                    material={materials.Material}
-                    position={[0.252751, 0.409318, 0.059049]}
+                    material={materials["Material.001"]}
+                    position={[0.25271055, 0.408667, 0.06356421]}
+                    rotation={[0.00034406, -0.01727151, -0.00248589]}
                   />
                   <mesh
-                    castShadows
-                    receiveShadows
                     name="realisation-item-3"
+                    castShadow
+                    receiveShadow
                     geometry={nodes["realisation-item-3"].geometry}
                     material={materials["Material.007"]}
-                    position={[-0.252213, -0.408446, -0.058923]}
+                    position={[-0.25221339, -0.40844575, -0.0589225]}
                   />
                 </mesh>
               </group>
               <group
-                ref={elementsRefs.rocket}
                 name="rocket-item-parent"
-                position={[1.249882, 6.570212, 6.047209]}
+                position={[1.24988234, 6.57021236, 6.04720926]}
+                ref={elementsRefs.rocket}
               >
                 <group
                   name="fusee-big-tronc"
-                  position={[-0.052141, 0.251118, -0.302983]}
-                  rotation={[-0.645469, -0.120625, -0.081131]}
-                  scale={1.089899}
+                  position={[-0.05214071, 0.25111818, -0.30298328]}
+                  rotation={[-0.64546876, -0.12062539, -0.08113075]}
+                  scale={[1.0898993, 1.0898993, 1.08989918]}
                 >
                   <mesh
-                    castShadows
-                    receiveShadows
                     name="Cylinder029"
+                    castShadow
+                    receiveShadow
                     geometry={nodes.Cylinder029.geometry}
                     material={materials["Material.007"]}
                   />
                   <mesh
-                    castShadows
-                    receiveShadows
                     name="Cylinder029_1"
+                    castShadow
+                    receiveShadow
                     geometry={nodes.Cylinder029_1.geometry}
-                    material={materials["Material.001"]}
+                    material={materials["Material.002"]}
                   />
                   <mesh
-                    castShadows
-                    receiveShadows
                     name="fusee-big-feu"
+                    castShadow
+                    receiveShadow
                     geometry={nodes["fusee-big-feu"].geometry}
-                    material={materials.Material}
-                    position={[0.08054, -2.019344, -0.000813]}
+                    material={materials["Material.001"]}
+                    position={[0.0805402, -2.01934433, -0.00081123]}
                   />
                   <mesh
-                    castShadows
-                    receiveShadows
                     name="fusee-big-hublot"
+                    castShadow
+                    receiveShadow
                     geometry={nodes["fusee-big-hublot"].geometry}
-                    material={materials.Material}
-                    position={[0.657124, 0.472553, -0.000812]}
-                    rotation={[Math.PI / 2, 0.193773, -Math.PI / 2]}
-                    scale={[0.365585, 0.158051, 0.365585]}
+                    material={materials["Material.001"]}
+                    position={[0.65712374, 0.47255278, -0.00081117]}
+                    rotation={[Math.PI / 2, 0.19377251, -Math.PI / 2]}
+                    scale={[0.36558509, 0.15805133, 0.36558506]}
                   />
                 </group>
               </group>
               <mesh
-                castShadows
-                receiveShadows
-                ref={elementsRefs.drupal}
                 name="drupal-item"
+                castShadow
+                receiveShadow
                 geometry={nodes["drupal-item"].geometry}
                 material={materials["Material.007"]}
-                position={[1.49639, 6.264128, -6.3177]}
+                position={[1.49639034, 6.26412821, -6.31770039]}
+                ref={elementsRefs.drupal}
               />
               <group
-                ref={elementsRefs.megaphone}
                 name="megaphone-item"
-                position={[1.727392, 6.266247, -17.912937]}
-                rotation={[-1.129542, -0.00621, 0.027272]}
+                position={[1.72739232, 6.2662468, -17.91293716]}
+                rotation={[-1.12954241, -0.00620998, 0.02727167]}
+                ref={elementsRefs.megaphone}
               >
                 <mesh
-                  castShadows
-                  receiveShadows
                   name="Cylinder012"
+                  castShadow
+                  receiveShadow
                   geometry={nodes.Cylinder012.geometry}
                   material={materials["Material.007"]}
                 />
                 <mesh
-                  castShadows
-                  receiveShadows
                   name="Cylinder012_1"
+                  castShadow
+                  receiveShadow
                   geometry={nodes.Cylinder012_1.geometry}
-                  material={materials.Material}
+                  material={materials["Material.001"]}
                 />
                 <mesh
-                  castShadows
-                  receiveShadows
                   name="Cylinder012_2"
+                  castShadow
+                  receiveShadow
                   geometry={nodes.Cylinder012_2.geometry}
-                  material={materials["Material.001"]}
-                />
-                <mesh
-                  castShadows
-                  receiveShadows
-                  name="Cylinder012_3"
-                  geometry={nodes.Cylinder012_3.geometry}
-                  material={materials["Material.001"]}
+                  material={materials["Material.002"]}
                 />
               </group>
               <group
-                ref={elementsRefs.pencil}
                 name="UX-pencil-item"
-                position={[1.632064, 6.798426, 18.384649]}
-                rotation={[-0.244954, 0, 0]}
+                position={[1.63206434, 6.79842567, 18.38464928]}
+                rotation={[-0.24495392, 0, 0]}
+                ref={elementsRefs.pencil}
               >
                 <mesh
-                  castShadows
-                  receiveShadows
                   name="Cylinder017"
+                  castShadow
+                  receiveShadow
                   geometry={nodes.Cylinder017.geometry}
-                  material={materials.Material}
-                />
-                <mesh
-                  castShadows
-                  receiveShadows
-                  name="Cylinder017_1"
-                  geometry={nodes.Cylinder017_1.geometry}
                   material={materials["Material.001"]}
                 />
                 <mesh
-                  castShadows
-                  receiveShadows
-                  name="Cylinder017_2"
-                  geometry={nodes.Cylinder017_2.geometry}
+                  name="Cylinder017_1"
+                  castShadow
+                  receiveShadow
+                  geometry={nodes.Cylinder017_1.geometry}
                   material={materials["Material.002"]}
                 />
                 <mesh
-                  castShadows
-                  receiveShadows
+                  name="Cylinder017_2"
+                  castShadow
+                  receiveShadow
+                  geometry={nodes.Cylinder017_2.geometry}
+                  material={materials["Material.003"]}
+                />
+                <mesh
                   name="Cylinder017_3"
+                  castShadow
+                  receiveShadow
                   geometry={nodes.Cylinder017_3.geometry}
                   material={materials["Material.007"]}
                 />
                 <mesh
-                  castShadows
-                  receiveShadows
                   name="Cylinder017_4"
+                  castShadow
+                  receiveShadow
                   geometry={nodes.Cylinder017_4.geometry}
                   material={materials["Material.004"]}
                 />
               </group>
             </group>
+            <group
+              name="Area"
+              position={[83.78812408, 0, 0]}
+              rotation={[-1.57067341, 1.5678573, -0.000112]}
+            />
             <group name="background-circles">
               <group>
                 <mesh
-                  castShadows
-                  receiveShadows
                   name="rond-ui-item-01"
+                  castShadow
+                  receiveShadow
                   geometry={nodes["rond-ui-item-01"].geometry}
                   material={materials["Material.019"]}
-                  position={[-1.194373, 6.492984, 18.510574]}
+                  position={[-1.19437265, 6.49298382, 18.51057434]}
                   rotation={[0, 0, -Math.PI / 2]}
-                  scale={1.096397}
+                  scale={[1.09639716, 1.09639716, 1.09639704]}
                   onPointerEnter={() => {
                     animate("play", ["UX-penceil-item_anim"], "pencil");
                   }}
@@ -418,7 +420,6 @@ const Model = (props) => {
                     animate("pause", ["UX-penceil-item_anim"], "pencil");
                   }}
                 />
-
                 <Text
                   color="white"
                   position={[-1.194373, 2, 18.510574]}
@@ -429,14 +430,14 @@ const Model = (props) => {
               </group>
               <group>
                 <mesh
-                  castShadows
-                  receiveShadows
                   name="rond-ui-item-02"
+                  castShadow
+                  receiveShadow
                   geometry={nodes["rond-ui-item-02"].geometry}
                   material={materials["Material.019"]}
-                  position={[-1.194373, 6.492984, 18.510574]}
+                  position={[-1.19437265, 6.49298382, 18.51057434]}
                   rotation={[0, 0, -Math.PI / 2]}
-                  scale={1.096397}
+                  scale={[1.09639716, 1.09639716, 1.09639704]}
                   onPointerEnter={() => {
                     animate(
                       "play",
@@ -462,14 +463,14 @@ const Model = (props) => {
               </group>
               <group>
                 <mesh
-                  castShadows
-                  receiveShadows
                   name="rond-ui-item-03"
+                  castShadow
+                  receiveShadow
                   geometry={nodes["rond-ui-item-03"].geometry}
                   material={materials["Material.019"]}
-                  position={[-1.194373, 6.492984, 18.510574]}
+                  position={[-1.19437265, 6.49298382, 18.51057434]}
                   rotation={[0, 0, -Math.PI / 2]}
-                  scale={1.096397}
+                  scale={[1.09639716, 1.09639716, 1.09639704]}
                   onPointerEnter={() => {
                     animate("play", ["drupal-item_anim"], "drupal");
                   }}
@@ -487,14 +488,14 @@ const Model = (props) => {
               </group>
               <group>
                 <mesh
-                  castShadows
-                  receiveShadows
                   name="rond-ui-item-04"
+                  castShadow
+                  receiveShadow
                   geometry={nodes["rond-ui-item-04"].geometry}
                   material={materials["Material.019"]}
-                  position={[-1.194373, 6.492984, 18.510574]}
+                  position={[-1.19437265, 6.49298382, 18.51057434]}
                   rotation={[0, 0, -Math.PI / 2]}
-                  scale={1.096397}
+                  scale={[1.09639716, 1.09639716, 1.09639704]}
                   onPointerEnter={() => {
                     animate("play", ["megaphone-item_anim"], "megaphone");
                   }}
@@ -512,14 +513,14 @@ const Model = (props) => {
               </group>
               <group>
                 <mesh
-                  castShadows
-                  receiveShadows
                   name="rond-ui-item05"
+                  castShadow
+                  receiveShadow
                   geometry={nodes["rond-ui-item05"].geometry}
                   material={materials["Material.019"]}
-                  position={[-1.194373, -5.284165, 18.510574]}
+                  position={[-1.19437265, -5.28416538, 18.51057434]}
                   rotation={[0, 0, -Math.PI / 2]}
-                  scale={1.096397}
+                  scale={[1.09639716, 1.09639716, 1.09639704]}
                   onPointerEnter={() => {
                     animate(
                       "play",
@@ -559,14 +560,14 @@ const Model = (props) => {
               </group>
               <group>
                 <mesh
-                  castShadows
-                  receiveShadows
                   name="rond-ui-item-06"
+                  castShadow
+                  receiveShadow
                   geometry={nodes["rond-ui-item-06"].geometry}
                   material={materials["Material.019"]}
-                  position={[-1.194373, -5.284165, 18.510574]}
+                  position={[-1.19437265, -5.28416538, 18.51057434]}
                   rotation={[0, 0, -Math.PI / 2]}
-                  scale={1.096397}
+                  scale={[1.09639716, 1.09639716, 1.09639704]}
                   onPointerEnter={() => {
                     animate(
                       "play",
@@ -600,14 +601,14 @@ const Model = (props) => {
               </group>
               <group>
                 <mesh
-                  castShadows
-                  receiveShadows
                   name="rond-ui-item-07"
+                  castShadow
+                  receiveShadow
                   geometry={nodes["rond-ui-item-07"].geometry}
                   material={materials["Material.019"]}
-                  position={[-1.194373, -5.284165, 18.510574]}
+                  position={[-1.19437265, -5.28416538, 18.51057434]}
                   rotation={[0, 0, -Math.PI / 2]}
-                  scale={1.096397}
+                  scale={[1.09639716, 1.09639716, 1.09639704]}
                   onPointerEnter={() => {
                     animate("play", ["insight-item_anim"], "insight");
                   }}
@@ -625,14 +626,14 @@ const Model = (props) => {
               </group>
               <group>
                 <mesh
-                  castShadows
-                  receiveShadows
                   name="rond-ui-item-08"
+                  castShadow
+                  receiveShadow
                   geometry={nodes["rond-ui-item-08"].geometry}
                   material={materials["Material.019"]}
-                  position={[-1.194373, -5.284165, 18.510574]}
+                  position={[-1.19437265, -5.28416538, 18.51057434]}
                   rotation={[0, 0, -Math.PI / 2]}
-                  scale={1.096397}
+                  scale={[1.09639716, 1.09639716, 1.09639704]}
                   onPointerEnter={() => {
                     animate(
                       "play",
@@ -670,6 +671,7 @@ const Model = (props) => {
           </group>
         </group>
       </group>
+      ;
     </>
   );
 };

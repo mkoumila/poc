@@ -1,5 +1,5 @@
 import { Suspense, Fragment, useState } from "react";
-import { Stage, useGLTF } from "@react-three/drei";
+import { Stage } from "@react-three/drei";
 import { Transition } from "@headlessui/react";
 import { Canvas } from "@react-three/fiber";
 import Model from "./Model";
@@ -56,14 +56,6 @@ const Void3DMenu = () => {
           </div>
           <Canvas camera={{ fov: 5 }} shadows>
             <ambientLight intensity={0.3} />
-            <pointLight position={[0, 0, 0]} intensity={0.3} />
-            <directionalLight
-              position={[0, 0, 5]}
-              intensity={0.7}
-              color="white"
-              castShadow
-              shadow-mapSize={1024}
-            />
             {/* <OrbitControls /> */}
             <Suspense fallback={null}>
               <Stage environment={null}>
@@ -76,7 +68,5 @@ const Void3DMenu = () => {
     </div>
   );
 };
-
-useGLTF.preload("/void_3d_menu_draco.gltf");
 
 export default Void3DMenu;
