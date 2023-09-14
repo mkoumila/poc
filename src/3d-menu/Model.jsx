@@ -3,6 +3,7 @@ import { Text, useAnimations, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { easing } from "maath";
+import gsap from "gsap";
 
 const Model = (props) => {
   const group = useRef();
@@ -31,11 +32,31 @@ const Model = (props) => {
     agence: useRef(),
   };
 
+  // Refs for each circle
+  const circlesRefs = {
+    pencilCircle: useRef(),
+    rocketCircle: useRef(),
+    drupalCircle: useRef(),
+    megaphoneCircle: useRef(),
+    analyticCircle: useRef(),
+    realisationCircle: useRef(),
+    insightCircle: useRef(),
+    agenceCircle: useRef(),
+  };
+
   const { nodes, materials, animations } = useGLTF(
     process.env.PUBLIC_URL + "models/menu/void_3d_menu_draco.glb"
   );
 
   const { actions } = useAnimations(animations, group);
+
+  useEffect(() => {
+    // to correct the model position
+    group.current.rotation.y = -80 * (Math.PI / 180);
+
+    // Changing scene position to get it closer to the light source for better shadows
+    group.current.position.set(-10, 5, -50);
+  }, []);
 
   const animate = (animationType, animationsIds, item) => {
     setHoveredItems({
@@ -57,14 +78,6 @@ const Model = (props) => {
     });
   };
 
-  useEffect(() => {
-    // to correct the model position
-    group.current.rotation.y = -80 * (Math.PI / 180);
-
-    // Changing scene position to get it closer the light source for better shadows
-    group.current.position.set(-10, 5, -50);
-  }, []);
-
   // To scale the hovered item
   useFrame((state, delta) => {
     Object.keys(hoveredItems).map((item) => {
@@ -76,6 +89,52 @@ const Model = (props) => {
       );
     });
   });
+
+  const zoomingInAnimation = (e, element, circlePosition) => {
+    // remove circle's title
+    e.eventObject.children[1].visible = false;
+
+    const duration = 1;
+    const timeline = gsap.timeline({ paused: true });
+
+    timeline
+      .to(circlesRefs[`${element}Circle`].current.scale, {
+        x: 5,
+        y: 5,
+        z: 5,
+        duration: duration,
+      })
+      .to(
+        circlesRefs[`${element}Circle`].current.position,
+        {
+          ...circlePosition,
+          duration: duration,
+        },
+        `-=${duration}`
+      )
+      .to(
+        elementsRefs[element].current.scale,
+        {
+          x: 2.5,
+          y: 2.5,
+          z: 2.5,
+          duration: duration,
+        },
+        `-=${duration}`
+      )
+      .to(
+        elementsRefs[element].current.position,
+        {
+          x: 12,
+          y: 11,
+          z: 0,
+          duration: duration,
+        },
+        `-=${duration}`
+      );
+
+    timeline.play();
+  };
 
   return (
     <>
@@ -403,7 +462,15 @@ const Model = (props) => {
               rotation={[-1.57067341, 1.5678573, -0.000112]}
             />
             <group name="background-circles">
-              <group>
+              <group
+                onClick={(e) =>
+                  zoomingInAnimation(e, "pencil", {
+                    x: 10,
+                    y: 0.009426,
+                    z: 0.03298,
+                  })
+                }
+              >
                 <mesh
                   name="rond-ui-item-01"
                   castShadow
@@ -419,6 +486,7 @@ const Model = (props) => {
                   onPointerLeave={() => {
                     animate("pause", ["UX-penceil-item_anim"], "pencil");
                   }}
+                  ref={circlesRefs.pencilCircle}
                 />
                 <Text
                   color="white"
@@ -428,7 +496,15 @@ const Model = (props) => {
                   Design d'expérience
                 </Text>
               </group>
-              <group>
+              <group
+                onClick={(e) =>
+                  zoomingInAnimation(e, "rocket", {
+                    x: 10,
+                    y: 0.012984,
+                    z: 56.5506,
+                  })
+                }
+              >
                 <mesh
                   name="rond-ui-item-02"
                   castShadow
@@ -452,6 +528,7 @@ const Model = (props) => {
                       "rocket"
                     );
                   }}
+                  ref={circlesRefs.rocketCircle}
                 />
                 <Text
                   color="white"
@@ -461,7 +538,15 @@ const Model = (props) => {
                   Performance marketing
                 </Text>
               </group>
-              <group>
+              <group
+                onClick={(e) =>
+                  zoomingInAnimation(e, "drupal", {
+                    x: 10,
+                    y: 0.022984,
+                    z: 112.921,
+                  })
+                }
+              >
                 <mesh
                   name="rond-ui-item-03"
                   castShadow
@@ -477,6 +562,7 @@ const Model = (props) => {
                   onPointerLeave={() => {
                     animate("pause", ["drupal-item_anim"], "drupal");
                   }}
+                  ref={circlesRefs.drupalCircle}
                 />
                 <Text
                   color="white"
@@ -486,7 +572,15 @@ const Model = (props) => {
                   Expertise Drupal 8
                 </Text>
               </group>
-              <group>
+              <group
+                onClick={(e) =>
+                  zoomingInAnimation(e, "megaphone", {
+                    x: 10,
+                    y: 0.022984,
+                    z: 169.6518,
+                  })
+                }
+              >
                 <mesh
                   name="rond-ui-item-04"
                   castShadow
@@ -502,6 +596,7 @@ const Model = (props) => {
                   onPointerLeave={() => {
                     animate("pause", ["megaphone-item_anim"], "megaphone");
                   }}
+                  ref={circlesRefs.megaphoneCircle}
                 />
                 <Text
                   color="white"
@@ -511,7 +606,15 @@ const Model = (props) => {
                   Social Media
                 </Text>
               </group>
-              <group>
+              <group
+                onClick={(e) =>
+                  zoomingInAnimation(e, "analytic", {
+                    x: 10,
+                    y: 0.009426,
+                    z: 0.03298,
+                  })
+                }
+              >
                 <mesh
                   name="rond-ui-item05"
                   castShadow
@@ -549,6 +652,7 @@ const Model = (props) => {
                       "analytic"
                     );
                   }}
+                  ref={circlesRefs.analyticCircle}
                 />
                 <Text
                   color="white"
@@ -558,7 +662,15 @@ const Model = (props) => {
                   Analytics
                 </Text>
               </group>
-              <group>
+              <group
+                onClick={(e) =>
+                  zoomingInAnimation(e, "realisation", {
+                    x: 10,
+                    y: 0.012984,
+                    z: 56.5506,
+                  })
+                }
+              >
                 <mesh
                   name="rond-ui-item-06"
                   castShadow
@@ -590,6 +702,7 @@ const Model = (props) => {
                       "realisation"
                     );
                   }}
+                  ref={circlesRefs.realisationCircle}
                 />
                 <Text
                   color="white"
@@ -599,7 +712,15 @@ const Model = (props) => {
                   Réalisations
                 </Text>
               </group>
-              <group>
+              <group
+                onClick={(e) =>
+                  zoomingInAnimation(e, "insight", {
+                    x: 10,
+                    y: 0.022984,
+                    z: 112.921,
+                  })
+                }
+              >
                 <mesh
                   name="rond-ui-item-07"
                   castShadow
@@ -615,6 +736,7 @@ const Model = (props) => {
                   onPointerLeave={() => {
                     animate("pause", ["insight-item_anim"], "insight");
                   }}
+                  ref={circlesRefs.insightCircle}
                 />
                 <Text
                   color="white"
@@ -624,7 +746,15 @@ const Model = (props) => {
                   Insights
                 </Text>
               </group>
-              <group>
+              <group
+                onClick={(e) =>
+                  zoomingInAnimation(e, "agence", {
+                    x: 10,
+                    y: 0.022984,
+                    z: 169.6518,
+                  })
+                }
+              >
                 <mesh
                   name="rond-ui-item-08"
                   castShadow
@@ -658,6 +788,7 @@ const Model = (props) => {
                       "agence"
                     );
                   }}
+                  ref={circlesRefs.agenceCircle}
                 />
                 <Text
                   color="white"
@@ -671,7 +802,16 @@ const Model = (props) => {
           </group>
         </group>
       </group>
-      ;
+      {/* HTML Content Overlay */}
+      {/* <mesh position={[0, 0, 0]}>
+        <Text color="black" fontSize={1.2}>
+          Performance Marketing
+        </Text>
+        <Text color="black" fontSize={0.8}>
+          Confiez la conversion de vos audiences et le monitoring de votre
+          performance digitale à des experts du webmarketing.
+        </Text>
+      </mesh> */}
     </>
   );
 };

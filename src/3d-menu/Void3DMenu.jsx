@@ -1,5 +1,5 @@
 import { Suspense, Fragment, useState } from "react";
-import { Stage } from "@react-three/drei";
+import { OrbitControls, Stage } from "@react-three/drei";
 import { Transition } from "@headlessui/react";
 import { Canvas } from "@react-three/fiber";
 import Model from "./Model";
