@@ -5,8 +5,27 @@ import { useFrame } from "@react-three/fiber";
 import { easing } from "maath";
 import gsap from "gsap";
 
+/* const ClosingCircle = () => {
+  const radius = 2; // Radius of the circle
+
+  // Create a geometry for the circle
+  const geometry = new THREE.CircleGeometry(radius, 32);
+
+  // Create a material with white color
+  const material = new THREE.MeshBasicMaterial({ color: 0xffff22 });
+
+  // Create a mesh using the geometry and material
+  const circleMesh = new THREE.Mesh(geometry, material);
+
+  return (
+    <primitive object={circleMesh} position={[0, 0, 0]} rotation={[0, 1, 0]} />
+  );
+}; */
+
 const Model = (props) => {
   const group = useRef();
+
+  const [hovered, setHovered] = useState(false);
 
   // State to handle hovered elements
   const [hoveredItems, setHoveredItems] = useState({
@@ -19,6 +38,69 @@ const Model = (props) => {
     insight: false,
     agence: false,
   });
+
+  const mockData = {
+    pencil: {
+      title: "Design d'expérience ",
+      content:
+        "Notre équipe d'experts UX vous accompagne pour concevoir des expériences efficientes et engageantes.",
+      link: { href: "#", title: "en découvrir plus" },
+    },
+    rocket: {
+      title: "Performance Marketing",
+      content:
+        "Confiez la conversion de vos audiences et le monitoring de votre performance digitale à des experts du webmarketing.",
+      link: { href: "#", title: "en découvrir plus" },
+    },
+    drupal: {
+      title: "Expertise Drupal 8",
+      content:
+        "Multisite, multilingue, confort de contribution, interfaçage SI... Confiez vos applications métier à des experts Drupal.",
+      link: { href: "#", title: "en découvrir plus" },
+    },
+    megaphone: {
+      title: "Social Media",
+      content:
+        "Nous construisons vos récits de marques sur les médias sociaux grâce aux insights culturels et business de vos clients, l'analyse de la data et notre compréhension des tendances émergentes.",
+      link: { href: "#", title: "en découvrir plus" },
+    },
+    analytic: {
+      title: "Analytics",
+      content:
+        "Tracking des parcours web pour des prises de décisions data-driven.",
+      link: { href: "#", title: "en découvrir plus" },
+    },
+    realisation: {
+      title: "Nos réalisations",
+      content:
+        "Stratégies digitales, campagnes de communication, identités de marques, applications métier…Découvrez nos réalisations.",
+      link: { href: "#", title: "en découvrir plus" },
+    },
+    insight: {
+      title: "Insights",
+      content:
+        "Inspirations, recommandations et insights. Explorons-ensemble les dernières analyses marketing de nos équipes.",
+      link: { href: "#", title: "en découvrir plus" },
+    },
+    agence: {
+      title: "L'agence",
+      content:
+        "Nous accompagnons de grandes entreprises locales et internationales dans leur transformation numérique.",
+      link: { href: "#", title: "en découvrir plus" },
+    },
+  };
+
+  // Refs for each element
+  const textsRefs = {
+    pencil: useRef(),
+    rocket: useRef(),
+    drupal: useRef(),
+    megaphone: useRef(),
+    analytic: useRef(),
+    realisation: useRef(),
+    insight: useRef(),
+    agence: useRef(),
+  };
 
   // Refs for each element
   const elementsRefs = {
@@ -81,6 +163,11 @@ const Model = (props) => {
     // Changing scene position to get it closer to the light source for better shadows
     group.current.position.set(-10, 5, -50);
   }, []);
+
+  // on mouse hover over element, change cursor style
+  useEffect(() => {
+    document.body.style.cursor = hovered ? "pointer" : "auto";
+  }, [hovered]);
 
   const animate = (animationType, animationsIds, item) => {
     setHoveredItems({
@@ -168,7 +255,30 @@ const Model = (props) => {
     });
   };
 
-  const zoomingInAnimation = (e, element, circlePosition) => {
+  // Reset texts to their initial position and scale
+  const textsToDefault = () => {
+    // hide other texts
+    Object.keys(textsRefs).map((textRef) => {
+      textsRefs[textRef].current.visible = false;
+    });
+
+    Object.keys(textsRefs).forEach((element) => {
+      const duration = 0.5;
+      const timeline = gsap.timeline({ paused: true });
+
+      timeline.to(textsRefs[element].current.scale, {
+        x: 0.01,
+        y: 0.01,
+        z: 0.01,
+        duration: duration,
+      });
+
+      timeline.play();
+    });
+  };
+
+  const onItemClick = (e, element, circlePosition) => {
+    textsToDefault();
     itemsToDefault();
     circlesToDefault();
 
@@ -214,9 +324,26 @@ const Model = (props) => {
           duration: duration,
         },
         `-=${duration}`
+      )
+      .to(
+        textsRefs[element].current.scale,
+        {
+          x: 1,
+          y: 1,
+          z: 1,
+          duration: duration / 2,
+        },
+        `-=${duration - 0.7}`
       );
 
     timeline.play();
+
+    textsRefs[element].current.visible = true;
+  };
+
+  const externalLink = (e, link, target = "_blank") => {
+    e.stopPropagation();
+    window.open(link, target);
   };
 
   return (
@@ -563,7 +690,7 @@ const Model = (props) => {
                   }}
                   ref={circlesRefs.pencilCircle}
                   onClick={(e) =>
-                    zoomingInAnimation(e, "pencil", {
+                    onItemClick(e, "pencil", {
                       x: 10,
                       y: 0.009426,
                       z: 0.03298,
@@ -605,7 +732,7 @@ const Model = (props) => {
                   }}
                   ref={circlesRefs.rocketCircle}
                   onClick={(e) =>
-                    zoomingInAnimation(e, "rocket", {
+                    onItemClick(e, "rocket", {
                       x: 10,
                       y: 0.012984,
                       z: 56.5506,
@@ -639,7 +766,7 @@ const Model = (props) => {
                   }}
                   ref={circlesRefs.drupalCircle}
                   onClick={(e) =>
-                    zoomingInAnimation(e, "drupal", {
+                    onItemClick(e, "drupal", {
                       x: 10,
                       y: 0.022984,
                       z: 112.921,
@@ -673,7 +800,7 @@ const Model = (props) => {
                   }}
                   ref={circlesRefs.megaphoneCircle}
                   onClick={(e) =>
-                    zoomingInAnimation(e, "megaphone", {
+                    onItemClick(e, "megaphone", {
                       x: 10,
                       y: 0.022984,
                       z: 169.6518,
@@ -729,7 +856,7 @@ const Model = (props) => {
                   }}
                   ref={circlesRefs.analyticCircle}
                   onClick={(e) =>
-                    zoomingInAnimation(e, "analytic", {
+                    onItemClick(e, "analytic", {
                       x: 10,
                       y: 0.009426,
                       z: 0.03298,
@@ -779,7 +906,7 @@ const Model = (props) => {
                   }}
                   ref={circlesRefs.realisationCircle}
                   onClick={(e) =>
-                    zoomingInAnimation(e, "realisation", {
+                    onItemClick(e, "realisation", {
                       x: 10,
                       y: 0.012984,
                       z: 56.5506,
@@ -813,7 +940,7 @@ const Model = (props) => {
                   }}
                   ref={circlesRefs.insightCircle}
                   onClick={(e) =>
-                    zoomingInAnimation(e, "insight", {
+                    onItemClick(e, "insight", {
                       x: 10,
                       y: 0.022984,
                       z: 112.921,
@@ -865,7 +992,7 @@ const Model = (props) => {
                   }}
                   ref={circlesRefs.agenceCircle}
                   onClick={(e) =>
-                    zoomingInAnimation(e, "agence", {
+                    onItemClick(e, "agence", {
                       x: 10,
                       y: 0.022984,
                       z: 169.6518,
@@ -885,16 +1012,58 @@ const Model = (props) => {
           </group>
         </group>
       </group>
-      {/* HTML Content Overlay */}
-      {/* <mesh position={[0, 0, 0]}>
-        <Text color="black" fontSize={1.2}>
-          Performance Marketing
-        </Text>
-        <Text color="black" fontSize={0.8}>
-          Confiez la conversion de vos audiences et le monitoring de votre
-          performance digitale à des experts du webmarketing.
-        </Text>
-      </mesh> */}
+      {/* <ClosingCircle /> */}
+
+      {/* Text content */}
+      {Object.keys(mockData).map((el, i) => {
+        return (
+          <mesh
+            scale={[0.01, 0.01, 0.01]}
+            key={i}
+            ref={textsRefs[el]}
+            visible={false}
+          >
+            <Text
+              color="black"
+              fontSize={1.2}
+              maxWidth={16}
+              textAlign="center"
+              position={[0, 3, 0]}
+              rotation={[0, 0, -0.02]}
+            >
+              {mockData[el].title}
+            </Text>
+            <Text
+              color="black"
+              fontSize={0.8}
+              maxWidth={18}
+              textAlign="center"
+              lineHeight={1.4}
+              position={[0, -1, 0]}
+              rotation={[0, 0, -0.02]}
+            >
+              {mockData[el].content}
+            </Text>
+            <Text
+              color="black"
+              fontSize={0.8}
+              maxWidth={18}
+              textAlign="center"
+              position={[0, -8, 0]}
+              rotation={[0, 0, -0.02]}
+              onClick={(e) => externalLink(e, mockData[el].link.href)}
+              onPointerOver={() => {
+                setHovered(true);
+              }}
+              onPointerLeave={() => {
+                setHovered(false);
+              }}
+            >
+              {mockData[el].link.title}
+            </Text>
+          </mesh>
+        );
+      })}
     </>
   );
 };
