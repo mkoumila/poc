@@ -121,6 +121,18 @@ const ModelNew = (props) => {
     agenceCircle: useRef(),
   };
 
+  // Refs for each closing circle
+  const closeCircleRefs = {
+    pencil: useRef(),
+    rocket: useRef(),
+    drupal: useRef(),
+    megaphone: useRef(),
+    analytic: useRef(),
+    realisation: useRef(),
+    insight: useRef(),
+    agence: useRef(),
+  };
+
   // Initial Circles position
   const elementsInitialPosition = {
     pencil: { x: 1.63206434, y: 6.79842567, z: 18.38464928 },
@@ -275,16 +287,24 @@ const ModelNew = (props) => {
   const onCircleClick = (e, element, circlePosition) => {
     e.stopPropagation(); // Prevent the event from propagating to elements behind
 
-    const updatedClickedItems = Object.fromEntries(
-      Object.keys(clickedItems).map((item) => [item, false])
-    );
+    // Hide all close circles elements
+    Object.keys(closeCircleRefs).map((el) => {
+      closeCircleRefs[el].current.visible = false;
+    });
 
+    // Show close circle for the active item
+    closeCircleRefs[element].current.visible = true;
+
+    // Reset all items in the clickedItems state to false and set the clicked item to true (to prevent repeated clicks on the same item)
     setClickedItems({
-      ...updatedClickedItems,
+      ...Object.fromEntries(
+        Object.keys(clickedItems).map((item) => [item, false])
+      ),
       [element]: true,
     });
 
     if (!clickedItems[element]) {
+      // Reset Texts, Items and circles to their initial position/state
       textsToDefault();
       itemsToDefault();
       circlesToDefault();
@@ -351,11 +371,19 @@ const ModelNew = (props) => {
 
   const onCloseClick = (e) => {
     e.stopPropagation();
+
+    // Reset all items in the clickedItems state to false and set the clicked item to true (to prevent repeated clicks on the same item)
     setClickedItems({
       ...Object.fromEntries(
         Object.keys(clickedItems).map((item) => [item, false])
       ),
     });
+
+    Object.keys(closeCircleRefs).map((el) => {
+      closeCircleRefs[el].current.visible = false;
+    });
+
+    // Reset Texts, Items and circles to their initial position/state
     textsToDefault();
     itemsToDefault();
     circlesToDefault();
@@ -720,6 +748,8 @@ const ModelNew = (props) => {
                     material={materials["mat.close"]}
                     position={[0.976514, 0.039088, -0.00095]}
                     scale={0.139392}
+                    ref={closeCircleRefs.pencil}
+                    visible={false}
                     onClick={(e) => {
                       onCloseClick(e);
                     }}
@@ -776,6 +806,8 @@ const ModelNew = (props) => {
                     position={[2.109531, 0.368952, -6.020223]}
                     rotation={[-0.024309, 0, Math.PI / 2]}
                     scale={0.324894}
+                    ref={closeCircleRefs.rocket}
+                    visible={false}
                     onClick={(e) => {
                       onCloseClick(e);
                     }}
@@ -823,6 +855,8 @@ const ModelNew = (props) => {
                     material={materials["mat.close"]}
                     position={[0.976514, 0.039088, -0.00095]}
                     scale={0.139392}
+                    ref={closeCircleRefs.drupal}
+                    visible={false}
                     onClick={(e) => {
                       onCloseClick(e);
                     }}
@@ -870,6 +904,8 @@ const ModelNew = (props) => {
                     material={materials["mat.close"]}
                     position={[0.976514, 0.039088, -0.000949]}
                     scale={0.139392}
+                    ref={closeCircleRefs.megaphone}
+                    visible={false}
                     onClick={(e) => {
                       onCloseClick(e);
                     }}
@@ -939,6 +975,8 @@ const ModelNew = (props) => {
                     material={materials["mat.close"]}
                     position={[0.976514, 0.039088, -0.00095]}
                     scale={0.139392}
+                    ref={closeCircleRefs.analytic}
+                    visible={false}
                     onClick={(e) => {
                       onCloseClick(e);
                     }}
@@ -1002,6 +1040,8 @@ const ModelNew = (props) => {
                     material={materials["mat.close"]}
                     position={[0.976514, 0.039088, -0.00095]}
                     scale={0.139392}
+                    ref={closeCircleRefs.realisation}
+                    visible={false}
                     onClick={(e) => {
                       onCloseClick(e);
                     }}
@@ -1049,6 +1089,8 @@ const ModelNew = (props) => {
                     material={materials["mat.close"]}
                     position={[0.976514, 0.039088, -0.00095]}
                     scale={0.139392}
+                    ref={closeCircleRefs.insight}
+                    visible={false}
                     onClick={(e) => {
                       onCloseClick(e);
                     }}
@@ -1114,6 +1156,8 @@ const ModelNew = (props) => {
                     material={materials["mat.close"]}
                     position={[0.976514, 0.039088, -0.000949]}
                     scale={0.139392}
+                    ref={closeCircleRefs.agence}
+                    visible={false}
                     onClick={(e) => {
                       onCloseClick(e);
                     }}
